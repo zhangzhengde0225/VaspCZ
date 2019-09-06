@@ -2,3 +2,4 @@
 *.css linguist-language=Python
 *.html linguist-language=Python
 *.py linguist-language=Python
+*.pl linguist-language=Python
