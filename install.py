@@ -37,7 +37,7 @@ def install(prefix, shortcut):
 	if not os.path.isdir(prefix):
 		os.makedirs(prefix)
 	file_path = os.getcwd()  # 获取安装文件的路径
-	prefix = prefix if '~' not in prefix else os.path.join(os.path.expanduser('~'), prefix.split('~')[-1])
+
 	os.chdir(prefix)  # 进到要安装的目录
 	print(f'install path: {prefix}')
 	if os.path.isdir('VaspCZ'):
@@ -83,7 +83,6 @@ def side_vtst(prefix):
 	print(f'installing vtst tools...')
 	file_path = os.getcwd()  # 安装文件的目录
 	os.chdir(prefix)
-	prefix = prefix if '~' not in prefix else os.path.join(os.path.expanduser('~'), prefix.split('~')[-1])
 	print(f'install path: {prefix}')
 	if not os.path.isdir('vtst'):
 		os.mkdir('vtst')
@@ -128,16 +127,24 @@ if __name__ == '__main__':
 	parser.add_argument('-sh_path', '--Vaspsh_path', default=sh_path, help='the sample vasp.sh path')
 	parser.add_argument('-psp_path', '--Vasp_Pseudopotential_path', default=pseudopotential_path)
 	args = parser.parse_args()
-	Vaspsh_path = args.Vaspsh_path
-	Vasp_Pseudopotential_path = args.Vasp_Pseudopotential_path
-	print(f'prefix:{args.prefix}\nshortcut:{args.shortcut}\ninstall_vtst:{args.vtst}\nPseudopotential_path:{Vasp_Pseudopotential_path}')
+	home = os.path.expanduser('~')
+	Vaspsh_path = os.path.expanduser('~') if args.Vaspsh_path == '~' else args.Vaspsh_path
+	Vaspsh_path = Vaspsh_path if '~/' not in Vaspsh_path else os.path.join(home, Vaspsh_path.split('~/')[-1])
+	psp_path = os.path.expanduser('~') if args.Vasp_Pseudopotential_path == '~' else args.Vasp_Psudopotential_path
+	Vasp_Pseudopotential_path = psp_path if '~/' not in psp_path else os.path.join(home, psp_path.split('~/')[-1])
+	prefix = os.path.expanduser('~') if args.prefix == '~' else args.prefix
+	prefix = prefix if '~/' not in prefix else os.path.join(home, prefix.split('~/')[-1])
+	print(f'{"":-<20}{"install info":^20}{"":-<20}')
+	print(f'{"install path:":<25}{prefix}\n{"shortcut:":<25}{args.shortcut}\n{"install_vtst:":<25}{args.vtst}')
+	print(f'{"Vasp.sh path:":<25}{Vaspsh_path}\n{"Pseudopotential_path:":<25}{Vasp_Pseudopotential_path}')
 	# 安装程序
-	install(args.prefix, args.shortcut)
+	print(f'{"":-<20}{"installing":^20}{"":-<20}')
+	install(prefix, args.shortcut)
 	# 安装VaspCZ库
 	install_lib()
 	# 安装vtsttool
 	if args.vtst:
-		side_vtst(args.prefix)
+		side_vtst(prefix)
 	os.chdir(os.path.expanduser('~'))
 	# os.system('source .bashrc')
 	subprocess.call(f'source {os.path.expanduser("~")}/.bashrc', shell=True)
