@@ -1,0 +1,230 @@
+#!/bin/ksh
+
+
+# Script to break the VASP DOSCAR file into segments for
+# each atomic site. 
+# JMS NRL 5/0/02
+
+# Modified to also align the Fermi level from the ground state
+# to E=0.0
+# JMS NRL 6/19/02
+
+# Modified to be compatible to LORBIT=11
+# weibingchen.thu@gmail.com
+# 2009.11.1
+
+
+# Executables reside here
+#BIN=~/bin/vtstscripts
+# GH: replace this so that it looks for vp in the same directory as this script
+EXE=$0
+BIN=${EXE%/*}
+
+if [ $# -ne 0 ]; then
+	echo "Usage: split_dos"
+	exit 2
+fi
+
+# Script to split the DOSCAR file into the atomic
+# projections labeled by atom number
+dosfile=DOSCAR
+outfile=OUTCAR
+infile=INCAR
+
+
+# Token for splitting the files
+token=$(sed -n '6 p' $dosfile | awk '{print $1}')
+
+# Number of points
+nl=$(sed -n '6 p' $dosfile | awk '{print $3}')
+
+# Number of atoms
+natom=$(sed -n '1 p' $dosfile | awk '{print $1}')
+
+
+# Get the Fermi level if the OUTCAR file is present,
+# else we set it to zero.
+if [ -a $outfile ]; then
+    echo "The" $outfile "exists, we use it to get the Fermi level,"
+    echo "the RWIGS tag and the number of spins."
+    efermi=$(grep "E-fermi" $outfile | tail -1 | awk '{print $3}')
+    echo "Fermi level:" $efermi
+    nspin=$(grep "ISPIN" $outfile | tail -1 | awk '{print $3}')
+    if [ $nspin -eq 2 ]; then
+	echo "Spin polarized calculation"
+    else
+	echo "Unpolarized calculation"
+    fi
+
+# 2.a
+# JMS 2/3/03 Modified to accept specification by LORBIT token. 
+#
+    lorbit=$(grep "LORBIT" $outfile | tail -1 | awk '{print $3}')
+    if [ $lorbit -eq 10 ]; then
+        echo "LORBIT = 10"
+        echo "WARNING: not completely test for vasp.4.*"
+	echo "Use at your own risk. Please check results for consistency."
+	form=1
+    elif [ $lorbit -eq 11 ];then
+        echo "LORBIT = 11"
+        echo "WARNING: not completely test for vasp.4.*"
+	echo "Use at your own risk. Please check results for consistency."
+	form=2
+    else 
+# 2.a
+	rwigs=$(grep "RWIGS" $outfile | tail -1 | awk '{print $3}' | sed 's/\.//g')
+	if [ $rwigs -eq -100 ]; then
+	    echo "RWIGS token not set"
+	    form=0
+	else
+	    echo "RWIGS token set"
+	    form=1
+	fi
+# 2.a
+    fi
+# 2.a
+
+else
+    echo "The" $outfile "does not exist, we set the Fermi level to 0"
+    echo "assume an unpolarized calculation, and RWIGS not set"
+    form=0
+    nspin=1
+    efermi=0.0
+fi
+
+# If the outcar file is not present and you wish to set something by hand
+# you should do it here. Uncomment the tokens below and set them by hand.
+
+#efermi=2.255
+#form=
+#nspin=
+
+
+
+# Get the atomic coordinates
+$BIN/vp >| tmp.dat
+tail -$natom tmp.dat | awk '{printf "%s %12.8f %12.8f %12.8f \n", "#", $2, $3, $4}' >| tmp.dat2
+
+
+# Total is first DOS
+if [ $form -eq 0 ]; then
+i=0
+else
+i=0
+fi
+
+
+start=7
+end=$((start+nl-1))
+echo $start $end
+#exit 0
+rm -f DOS0
+if [ $form -eq 1 ]; then
+
+    while [ $i -le $natom ]; do
+
+    	echo $i $start $end
+
+	if [ $i -gt 0 ]; then
+	    sed -n ''$i' p' tmp.dat2 >| DOS$i
+	fi
+
+	if [ $i -gt 0 ]; then
+
+# Atomic projected DOS
+	    if [ $nspin -eq 2 ]; then
+		sed -n ''$start','$end' p' $dosfile | awk '{printf "%12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f \n", $1+(-1)*'$efermi', $2, -1*$3, $4, -1*$5, $6, -1*$7}' >> DOS$i
+	    else
+		sed -n ''$start','$end' p' $dosfile | awk '{printf "%12.8f %12.8f %12.8f %12.8f \n", $1+(-1)*'$efermi', $2, $3, $4 }' >> DOS$i
+	    fi		
+
+	else
+
+# Total DOS
+	    if [ $nspin -eq 2 ]; then
+		sed -n ''$start','$end' p' $dosfile | awk '{printf "%12.8f %12.8f %12.8f %12.8f %12.8f \n", $1+(-1)*'$efermi', $2, -1*$3, $4, -1*$5 }' >> DOS$i
+	    else
+		sed -n ''$start','$end' p' $dosfile | awk '{printf "%12.8f %12.8f %12.8f \n", $1+(-1)*'$efermi', $2, $3 }' >> DOS$i
+	    fi
+
+        fi
+
+	start=$((end+2))
+	end=$((start+nl-1))
+	i=$((i+1))
+    done
+
+elif [ $form -eq 0 ];then
+# the form=0 is an unkown code!
+    while [ $i -le 0 ]; do
+
+    	echo $i $start $end
+
+	if [ $i -gt 0 ]; then
+	    sed -n ''$i' p' tmp.dat2 >| DOS$i
+	fi
+
+	if [ $i -gt 0 ]; then
+
+# Atomic projected DOS
+	    if [ $nspin -eq 2 ]; then
+		sed -n ''$start','$end' p' $dosfile | awk '{printf "%12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f \n", $1+(-1)*'$efermi', $2, -1*$3, $4, -1*$5, $6, -1*$7}' >> DOS$i
+	    else
+		sed -n ''$start','$end' p' $dosfile | awk '{printf "%12.8f %12.8f %12.8f %12.8f \n", $1+(-1)*'$efermi', $2, $3, $4 }' >> DOS$i
+	    fi		
+
+	else
+
+# Total DOS
+	    if [ $nspin -eq 2 ]; then
+		sed -n ''$start','$end' p' $dosfile | awk '{printf "%12.8f %12.8f %12.8f %12.8f %12.8f \n", $1+(-1)*'$efermi', $2, -1*$3, $4, -1*$5 }' >> DOS$i
+	    else
+		sed -n ''$start','$end' p' $dosfile | awk '{printf "%12.8f %12.8f %12.8f \n", $1+(-1)*'$efermi', $2, $3 }' >> DOS$i
+	    fi
+
+        fi
+
+	start=$((end+2))
+	end=$((start+nl-1))
+	i=$((i+1))
+    done
+
+elif [ $form -eq 2 ];then
+
+    while [ $i -le $natom ]; do
+
+    	echo $i $start $end
+
+	if [ $i -gt 0 ]; then
+	    sed -n ''$i' p' tmp.dat2 >| DOS$i
+	fi
+
+	if [ $i -gt 0 ]; then
+
+# Atomic projected DOS
+	    if [ $nspin -eq 2 ]; then
+		sed -n ''$start','$end' p' $dosfile | awk '{printf "%12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f \n", $1+(-1)*'$efermi', $2, -1*$3, $4, -1*$5, $6, -1*$7,$8,-1*$9,$10,-1*$11,$12,-1*$13,$14,-1*$15,$16,-1*$17,$18,-1*$19}' >> DOS$i
+	    else
+		sed -n ''$start','$end' p' $dosfile | awk '{printf "%12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f \n", $1+(-1)*'$efermi', $2, $3, $4,$5,$6,$7,$8,$9,$10 }' >> DOS$i
+	    fi		
+
+	else
+
+# Total DOS
+	    if [ $nspin -eq 2 ]; then
+		sed -n ''$start','$end' p' $dosfile | awk '{printf "%12.8f %12.8f %12.8f %12.8f %12.8f \n", $1+(-1)*'$efermi', $2, -1*$3, $4, -1*$5 }' >> DOS$i
+	    else
+		sed -n ''$start','$end' p' $dosfile | awk '{printf "%12.8f %12.8f %12.8f \n", $1+(-1)*'$efermi', $2, $3 }' >> DOS$i
+	    fi
+
+        fi
+
+	start=$((end+2))
+	end=$((start+nl-1))
+	i=$((i+1))
+    done
+
+fi
+
+exit 0
+

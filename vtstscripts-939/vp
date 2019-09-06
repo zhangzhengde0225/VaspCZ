@@ -1,0 +1,83 @@
+#!/bin/ksh
+
+
+# Script to grab the atomic positions from the 
+# OUTCAR VASP file and write them to a file for use
+# with an xmol movie.
+# J M Sullivan NRL 12/4/01
+
+# Scale the forces by this factor for visualization
+fscale=1
+
+
+posfile=POSCAR
+# Output file containing the data
+outfile=OUTCAR
+# Token to search for to get the atomic positions
+token=POSITION
+
+# Get the atom number types; changed by GH 2/26/19 to work with vasp.5 POSCAR files
+set -A ntype $(sed -n '7 p' $posfile)
+echo "Number of atom types:" ${#ntype[*]}
+echo "Multiplicities of these types:" ${ntype[*]}
+ns=${#ntype[*]}
+i=0
+natoms=0
+while [ $i -le $((ns-1)) ]; do
+    nt=${ntype[$i]}
+    let natoms=$natoms+$nt
+    i=$((i+1))
+done
+echo "Total number of atoms:" $natoms
+
+
+
+# Get the atom labels from the OUTCAR file
+set -A type
+#_jms 4/2/03
+#set -A label $(grep "POTCAR:" $outfile | head -$ns | sed 's/POTCAR://g' | sed 's/US//g')
+#set -A label $(grep "POTCAR:" $outfile | head -$ns | sed 's/POTCAR://g' | sed 's/US//g'| sed 's/PAW//g' | awk '{print $1}')
+set -A label $(grep "POTCAR:" $outfile | head -$ns | sed 's/POTCAR://g' | sed 's/US//g'| sed 's/PAW//g' | sed 's/_PBE//g' | awk '{print $1}')
+#_jms 4/2/03
+
+#label[1]=H1
+echo ${label[*]}
+
+nt=0
+i=0
+while [ $i -le $((ns-1)) ]; do
+    j=1
+    while [ $j -le ${ntype[$i]} ]; do
+	nt=$((nt+1))
+	j=$((j+1))
+	type[$nt]=${label[$i]}
+	#echo $nt ${type[$nt]}
+    done
+    i=$((i+1))
+done
+echo ${type[*]}
+
+
+grep -n "$token" $outfile | sed 's/POSITION/\ POSITION/g' | sed 's/://g' >| tmp.dump
+while read nstart trash
+do
+	nstart=$((nstart+2))
+	nend=$((nstart+natoms-1))
+	#nend=$(echo $nstart $natoms | awk '{print $1+$2-1}')
+	#echo $nstart $nend
+	echo $natoms
+	echo
+	sed -n ''$nstart','$nend' p' $outfile | awk '{printf "%12.9f %12.9f %12.9f %s %12.9f %12.9f %12.9f \n", $1, $2, $3, NR, '$fscale'*$4, '$fscale'*$5, '$fscale'*$6}' >| tmp.dump2
+	i=1
+	while read a b c
+	do
+		echo ${type[$i]} $a $b $c
+		i=$((i+1))	
+	done < tmp.dump2
+
+done < tmp.dump
+
+rm -f tmp.dump tmp.dump2
+
+exit 0
+

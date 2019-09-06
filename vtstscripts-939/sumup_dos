@@ -1,0 +1,123 @@
+#!/bin/bash
+#Name:sumup_dos
+#Function: sum up the DOS files split by dos_split according to the selected range
+#Usage: sumup_dos [begin] [end] [element_name]
+#Author:weibingchen.thu@gmail.com
+#License:GPL 3.0
+#Version:0.01
+
+#Define format
+if [ "$#" -lt "3" ];then
+		echo "Usage: sumup_dos [begin] [end] [element_name]"
+		echo "   eg. sumup_dos 1 16 Zn"
+		echo "   it sums up files from DOS1 to DOS16 and output Zn Zn_s Zn_p Zn_d"
+		exit 1
+elif [ ! -e "DOS$1" ]||[ ! -e "DOS$2" ];then
+		echo "Either DOS$1 or DOS$2 is not found! Check your files."
+		exit 1
+fi
+
+echo "SUM UP BEGIN!"
+begin=$1
+end=$2
+elementname=$3
+echo "DOS$begin to DOS$end will be summed up to generate $elementname files"
+orbitname=("s" "p" "d" "f")
+
+#Ispin 
+if [ -e "DOS0" ];then
+		ISspin=`awk '{print $4}' DOS0` 
+		if [ -n "$ISspin" ];then
+				ISPIN=2
+				echo "Polarized DOS calculation!"
+		else 
+				ISPIN=1
+				echo "NONPolarized DOS calculation!"
+		fi
+else
+		echo 'No DOS0 file! I cannot tell whether it is polarized'
+		echo 'Input the ISPIN,1 for nonpolarized and 2 for polarized'
+		read -e -p"ISPIN=" ISPIN
+		if [ "$ISPIN" -lt "1" ]||[ "$ISPIN" -gt "2" ];then
+				echo "Wrong input! Are you kidding me?"
+				exit 1
+		fi
+fi
+
+#Lorbit number
+if [ "$ISPIN" -eq "1" ];then
+		ISdorbit=`awk '{print $4}' DOS$begin`
+		ISforbit=`awk '{print $5}' DOS$begin`
+		if [ -z "$ISdorbit" ];then
+#这里的orbitnum比实际少1，是因为数组计数的方便
+				orbitnum=1
+		elif [ -z "$ISforbit" ];then
+				orbitnum=2
+		else 
+				orbitnum=3
+		fi
+else 
+		ISdorbit=`awk '{print $6}' DOS$begin`
+		ISforbit=`awk '{print $8}' DOS$begin`
+		if [ -z "$ISdorbit" ];then
+				orbitnum=1
+		elif [ -z "$ISforbit" ];then
+				orbitnum=2
+		else 
+				orbitnum=3
+		fi
+fi
+echo "There is $((orbitnum + 1)) orbits in this element"
+
+#cleanup
+for i in `seq 0 $orbitnum`;do
+		rm $elementname\_${orbitname[$i]} -rf
+done
+
+
+#Sumup
+for filenum in `seq $begin $end`;do
+		echo "DOS$filenum is summed up!"
+		if [ "$ISPIN" -eq "1" ];then
+				for orbitseq in `seq 0 $orbitnum`;do
+					    orbit=${orbitname[$orbitseq]}
+						row=$((orbitseq + 2))
+						awk '{if (NR > 1)printf "%12.5f %12.5f\n",$1,$v1}' v1=$row DOS$filenum > tmp_$orbit
+						if [ -e "$elementname"_"$orbit" ];then
+								join $elementname\_$orbit tmp_$orbit > tmp2_$orbit
+								awk '{printf "%12.5f %12.5f\n",$1,$2+$3}' tmp2_$orbit >$elementname\_$orbit 
+#								awk '{print $1,$2+$3}' tmp2_$orbit >$elementname\_$orbit 
+						 else
+								mv tmp_$orbit $elementname\_$orbit
+						fi
+				done
+		else 
+				for orbitseq in `seq 0 $orbitnum`;do
+					    orbit=${orbitname[$orbitseq]}
+						row=$((2 * orbitseq + 2))
+						nrow=$((row + 1))
+						awk '{if (NR > 1)printf "%12.5f %12.5f %12.5f\n",$1,$v1,$v2}' v1=$row v2=$nrow DOS$filenum > tmp_$orbit
+						if [ -e "$elementname"_"$orbit" ];then
+								join $elementname\_$orbit tmp_$orbit > tmp2_$orbit
+								awk '{printf "%12.5f %12.5f %12.5f\n",$1,$2+$4,$3+$5}' tmp2_$orbit >$elementname\_$orbit 
+						 else
+								mv tmp_$orbit $elementname\_$orbit
+						fi
+				done
+		fi
+done
+
+#Merge files
+rm $elementname
+for i in `seq 0 $orbitnum`;do
+		echo "$elementname"_"${orbitname[$i]} is done!"
+		if [ -e $elementname ];then
+				join $elementname $elementname\_${orbitname[$i]} > tmp3 
+				mv tmp3 $elementname
+		else
+				cp $elementname\_${orbitname[$i]} $elementname
+		fi
+done
+
+rm tmp_* tmp2_* tmp3 -rf
+exit 0

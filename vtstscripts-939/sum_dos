@@ -1,0 +1,82 @@
+#!/bin/ksh
+
+
+
+# Script to sum up DOS files from VASP
+if [ $# -lt 3 ]; then
+	echo "Usage: sum_dos [0] [start] [end]"
+	echo "Or: sum_dos [1] [i] [j] [k] [l] ..."
+	exit 1
+fi
+
+
+type=$1
+shift 1
+
+# Contiguous
+if [ $type -eq 0 ]; then
+
+	start=$1
+	end=$2
+	shift 2
+	string=$start.to.$end
+
+	echo $start
+	echo $end
+
+
+# First file
+	i=$start
+	nl=$(wc -l DOS$i | sed 's/://g' | awk '{print $1}')
+echo $nl
+
+	sed -n '2,'$nl' p' DOS$i | awk '{printf "%12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f \n", $1, $2, $3, $4, $5, $6, $7, $2+$4+$6, $3+$5+$7}' >| DOS.tmp
+
+	i=$((i+1))
+
+	while [ $i -le $end ]; do
+
+		sed -n '2,'$nl' p' DOS$i | awk '{printf "%12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f \n", $1, $2, $3, $4, $5, $6, $7, $2+$4+$6, $3+$5+$7}'  >| DOS.tmp2
+
+		paste DOS.tmp DOS.tmp2 | awk '{printf "%15.8f %15.8f %15.8f %15.8f %15.8f %15.8f %15.8f %15.8f %15.8f \n", $1, $2+$11, $3+$12, $4+$13, $5+$14, $6+$15, $7+$16, $8+$17, $9+$18}' >| DOS.tmp3
+
+		mv -f DOS.tmp3 DOS.tmp
+
+		i=$((i+1))
+
+	done
+
+
+else
+
+	start=$1
+	shift 1
+
+# First file
+	i=$start
+	nl=$(wc -l DOS$i | sed 's/://g' | awk '{print $1}')
+	echo $nl
+
+	sed -n '2,'$nl' p' DOS$i | awk '{printf "%12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f \n", $1, $2, $3, $4, $5, $6, $7, $2+$4+$6, $3+$5+$7}' >| DOS.tmp
+	string=$start
+	for i in "$@"; do
+
+		echo $i
+		string=$(echo $string.$i)
+		sed -n '2,'$nl' p' DOS$i | awk '{printf "%12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f \n", $1, $2, $3, $4, $5, $6, $7, $2+$4+$6, $3+$5+$7}'  >| DOS.tmp2
+
+		paste DOS.tmp DOS.tmp2 | awk '{printf "%15.8f %15.8f %15.8f %15.8f %15.8f %15.8f %15.8f %15.8f %15.8f \n", $1, $2+$11, $3+$12, $4+$13, $5+$14, $6+$15, $7+$16, $8+$17, $9+$18}' >| DOS.tmp3
+
+		mv -f DOS.tmp3 DOS.tmp
+	done
+
+
+fi
+
+
+mv DOS.tmp DOS.SUM.$string
+rm -f DOS.tmp2
+
+
+
+exit 0
