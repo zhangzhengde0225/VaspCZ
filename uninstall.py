@@ -19,18 +19,20 @@ print(f'{"lib path":<25}{lib_path}')
 
 
 def uninstall():
-	print(f'{"":-<20}{"VaspCZ Uninstalling...:^20"}{"":-<}')
+	print(f'{"":-<20}{"VaspCZ Uninstalling...":^20}{"":-<}')
 	# 卸载VaspCZ
 	current_path = os.getcwd()
 	os.chdir(install_path)
+	print('uninstall VaspCZ software')
 	if os.path.isdir('VaspCZ'):
 		os.system(f'rm -rf VaspCZ')
 	if os.path.isdir('vtst'):
 		os.system(f'rm -rf vtst')
+	print(f'uninstall lib')
 	os.chdir(lib_path)
 	if os.path.isdir('VaspCZ'):
 		os.system(f'rm -rf VaspCZ')
-	print(f'{"":-<20}{"VaspCZ Uninstalled:^20"}{"":-<}')
+	print(f'{"":-<20}{"VaspCZ Uninstalled":^20}{"":-<}')
 
 
 if __name__ == '__main__':
