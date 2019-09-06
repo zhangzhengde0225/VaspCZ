@@ -100,10 +100,12 @@ def install_lib():
 		raise NameError('Did not found python lib path when install VaspCZ lib')
 	file_path = os.getcwd()  # 安装文件的目录
 	os.chdir(lib_path)
+	if os.path.isdir('VaspCZ'):
+		os.system('rm -rf VaspCZ')
 	os.mkdir('VaspCZ')
 	os.chdir('VaspCZ')
 	os.system(f"cp -rf {file_path}/sourcecode/__init__.py .")
-	os.system(f"cp -rf {file_path}/sourcecode/zzdlib .")
+	os.system(f"cp -rf {file_path}/sourcecode/zzdlib.py .")
 	os.chdir(file_path)
 
 
