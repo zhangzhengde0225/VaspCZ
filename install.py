@@ -2,8 +2,17 @@ import os, sys
 import argparse
 import subprocess
 
+# Default Configuration
+install_path = '~/bin'  # VaspCZ的安装目录，默认在用户/bin下
+sh_path = '~'  # 程序中需要提交Vasp计算程序时，qsub Vasp.sh命令中Vasp.sh的目录，默认是用户根目录
+pseudopotential_path = '~'
+shortcut = 'vcz'  # 程序快捷键
+vtst = True  # 是否安装VTST tools工具
+
+
 
 __version__ = '1.0.1'
+
 
 def write_path_to_bashrc(path):
 	with open(os.path.expanduser('~')+'/.bashrc', 'r') as f:
@@ -22,13 +31,15 @@ def write_path_to_bashrc(path):
 	with open(os.path.expanduser('~') + '/.bashrc', 'w') as f:
 		f.writelines(data)
 
+
 def install(prefix, shortcut):
 	if not os.path.isdir(prefix):
 		os.makedirs(prefix)
 	file_path = os.getcwd()  # 获取安装文件的路径
 	os.chdir(prefix)  # 进到要安装的目录
-	if not os.path.isdir('VaspCZ'):
-		os.mkdir('VaspCZ')
+	if os.path.isdir('VaspCZ'):
+		os.system('rm -rf VaspCZ')
+	os.mkdir('VaspCZ')
 	os.chdir('VaspCZ')
 
 	if os.path.isdir('sourcecode'):
@@ -46,6 +57,7 @@ def install(prefix, shortcut):
 	with open(f'sourcecode/VaspCZ{__version__}.py', 'w') as f:
 		f.writelines(data)
 
+
 	# 做软链接
 	for shortc in shortcut.split(','):
 		os.system(f'ln -sf sourcecode/VaspCZ{__version__}.py '+shortc)
@@ -56,8 +68,10 @@ def install(prefix, shortcut):
 
 	# 在安装目录创建文件build-in_data, 目前存储Vasp.sh的路径
 	global Vaspsh_path
+	global Vasp_Pseudopotential_path
 	with open('sourcecode/build-in_data.txt', 'w') as f:
 		f.writelines(f'Vaspsh_path={Vaspsh_path}\n')
+		f.writelines(f'Vasp_Pseudopotential_path={Vasp_Pseudopotential_path}')
 
 	os.chdir(file_path)
 
@@ -75,16 +89,40 @@ def side_vtst(prefix):
 	os.chdir(file_path)
 
 
+def install_lib():
+	# 获取当前python的依赖库的路径
+	lib_path = None
+	for path in sys.path:
+		if os.path.basename(path) == 'site-packages':
+			lib_path = path
+			break
+	if lib_path is None:
+		raise NameError('Did not found python lib path when install VaspCZ lib')
+	file_path = os.getcwd()  # 安装文件的目录
+	os.chdir(lib_path)
+	os.mkdir('VaspCZ')
+	os.chdir('VaspCZ')
+	os.system(f"cp -rf {file_path}/sourcecode/__init__.py .")
+	os.system(f"cp -rf {file_path}/sourcecode/zzdlib .")
+	os.chdir(file_path)
+
+
+
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
-	parser.add_argument('-p', '--prefix', default=os.path.join(os.path.expanduser('~'), 'bin'), help='installation path')  # 安装路径
-	parser.add_argument('-s', '--shortcut', default='v, V', help='Shortcat of the VaspCZ')  # 安装后的快捷键
-	parser.add_argument('-v', '--vtst', default=True, help='install vtst or not, bool, default=True')
-	parser.add_argument('-sh_path', '--Vaspsh_path', default='~', help='the sample vasp.sh path')
+	parser.add_argument('-p', '--prefix', default=install_path, help='installation path')  # 安装路径
+	parser.add_argument('-s', '--shortcut', default=shortcut, help='Shortcat of the VaspCZ')  # 安装后的快捷键
+	parser.add_argument('-v', '--vtst', default=vtst, help='install vtst or not, bool, default=True')
+	parser.add_argument('-sh_path', '--Vaspsh_path', default=sh_path, help='the sample vasp.sh path')
+	parser.add_argument('-psp_path', '--Vasp_Pseudopotential_path', default=pseudopotential_path)
 	args = parser.parse_args()
 	Vaspsh_path = args.Vaspsh_path
-	print(f'prefx:{args.prefix} shortcut:{args.shortcut} install_vtst:{args.vtst}')
+	Vasp_Pseudopotential_path = args.Vasp_Pseudopotential_path
+	print(f'prefx:{args.prefix}\nshortcut:{args.shortcut}\ninstall_vtst:{args.vtst}\nPseudopotential_path:{}')
+	# 安装程序
 	install(args.prefix, args.shortcut)
+	# 安装VaspCZ库
+	install_lib()
 	# 安装vtsttool
 	if args.vtst:
 		side_vtst(args.prefix)
