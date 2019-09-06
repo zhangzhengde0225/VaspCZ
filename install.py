@@ -76,7 +76,7 @@ def install(prefix, shortcut):
 		f.writelines(f'Vasp_Pseudopotential_path={Vasp_Pseudopotential_path}')
 
 	os.chdir(file_path)
-	print('VaspCZ software installed successfully.')
+	print('VaspCZ software installed successfully.\n')
 
 
 def side_vtst(prefix):
@@ -92,7 +92,7 @@ def side_vtst(prefix):
 	path = os.path.join(prefix, 'vtst')
 	write_path_to_bashrc(path)
 	os.chdir(file_path)
-	print(f'vtst tools installed successfully.')
+	print(f'vtst tools installed successfully.\n')
 
 
 def install_lib():
@@ -115,7 +115,7 @@ def install_lib():
 	os.system(f"cp -rf {file_path}/sourcecode/__init__.py .")
 	os.system(f"cp -rf {file_path}/sourcecode/zzdlib.py .")
 	os.chdir(file_path)
-	print(f'VaspCZ python lib installed successfully.')
+	print(f'VaspCZ python lib installed successfully.\n')
 
 
 
