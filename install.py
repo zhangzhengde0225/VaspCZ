@@ -72,8 +72,10 @@ def install(prefix, shortcut):
 	global Vaspsh_path
 	global Vasp_Pseudopotential_path
 	with open('sourcecode/build-in_data.txt', 'w') as f:
+		f.writelines(f'Vaspsh_path={prefix}\n')
 		f.writelines(f'Vaspsh_path={Vaspsh_path}\n')
 		f.writelines(f'Vasp_Pseudopotential_path={Vasp_Pseudopotential_path}')
+
 
 	os.chdir(file_path)
 	print('VaspCZ software installed successfully.\n')
@@ -95,7 +97,7 @@ def side_vtst(prefix):
 	print(f'vtst tools installed successfully.\n')
 
 
-def install_lib():
+def install_lib(prefix):
 	# 获取当前python的依赖库的路径
 	print(f'installing VaspCZ python lib...')
 	lib_path = None
@@ -114,6 +116,7 @@ def install_lib():
 	os.chdir('VaspCZ')
 	os.system(f"cp -rf {file_path}/sourcecode/__init__.py .")
 	os.system(f"cp -rf {file_path}/sourcecode/zzdlib.py .")
+	os.system(f"cp -rf {prefix}/sourcecode/ .")
 	os.chdir(file_path)
 	print(f'VaspCZ python lib installed successfully.\n')
 
@@ -141,11 +144,12 @@ if __name__ == '__main__':
 	print(f'{"":-<20}{"installing":^20}{"":-<20}')
 	install(prefix, args.shortcut)
 	# 安装VaspCZ库
-	install_lib()
+	install_lib(prefix)
 	# 安装vtsttool
 	if args.vtst:
 		side_vtst(prefix)
 	os.chdir(os.path.expanduser('~'))
 	# os.system('source .bashrc')
 	subprocess.call(f'source {os.path.expanduser("~")}/.bashrc', shell=True)
+	print(f'{"":-<20}{"install finished":^20}{"":-<20}')
 

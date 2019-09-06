@@ -85,7 +85,7 @@ class File():
 	def Vaspsh_path():
 		with open(f'{VaspCZ_path}/build-in_data.txt', 'r') as f:
 			data =f.readlines()
-		Vaspsh_path = data[0].split('=')[1].strip('\n')
+		Vaspsh_path = data[1].split('=')[1].strip('\n')
 		return Vaspsh_path
 
 
