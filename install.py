@@ -33,10 +33,13 @@ def write_path_to_bashrc(path):
 
 
 def install(prefix, shortcut):
+	print('installing VaspCZ software...')
 	if not os.path.isdir(prefix):
 		os.makedirs(prefix)
 	file_path = os.getcwd()  # 获取安装文件的路径
+	prefix = prefix if '~' not in prefix else os.path.join(os.path.expanduser('~'), prefix.split('~')[-1])
 	os.chdir(prefix)  # 进到要安装的目录
+	print(f'install path: {prefix}')
 	if os.path.isdir('VaspCZ'):
 		os.system('rm -rf VaspCZ')
 	os.mkdir('VaspCZ')
@@ -57,7 +60,6 @@ def install(prefix, shortcut):
 	with open(f'sourcecode/VaspCZ{__version__}.py', 'w') as f:
 		f.writelines(data)
 
-
 	# 做软链接
 	for shortc in shortcut.split(','):
 		os.system(f'ln -sf sourcecode/VaspCZ{__version__}.py '+shortc)
@@ -74,11 +76,15 @@ def install(prefix, shortcut):
 		f.writelines(f'Vasp_Pseudopotential_path={Vasp_Pseudopotential_path}')
 
 	os.chdir(file_path)
+	print('VaspCZ software installed successfully.')
 
 
 def side_vtst(prefix):
+	print(f'installing vtst tools...')
 	file_path = os.getcwd()  # 安装文件的目录
 	os.chdir(prefix)
+	prefix = prefix if '~' not in prefix else os.path.join(os.path.expanduser('~'), prefix.split('~')[-1])
+	print(f'install path: {prefix}')
 	if not os.path.isdir('vtst'):
 		os.mkdir('vtst')
 	path = os.path.join(file_path, 'vtstscripts-939')
@@ -87,10 +93,12 @@ def side_vtst(prefix):
 	path = os.path.join(prefix, 'vtst')
 	write_path_to_bashrc(path)
 	os.chdir(file_path)
+	print(f'vtst tools installed successfully.')
 
 
 def install_lib():
 	# 获取当前python的依赖库的路径
+	print(f'installing VaspCZ python lib...')
 	lib_path = None
 	for path in sys.path:
 		if os.path.basename(path) == 'site-packages':
@@ -99,6 +107,7 @@ def install_lib():
 	if lib_path is None:
 		raise NameError('Did not found python lib path when install VaspCZ lib')
 	file_path = os.getcwd()  # 安装文件的目录
+	print(f'lib path: {lib_path}')
 	os.chdir(lib_path)
 	if os.path.isdir('VaspCZ'):
 		os.system('rm -rf VaspCZ')
@@ -107,6 +116,7 @@ def install_lib():
 	os.system(f"cp -rf {file_path}/sourcecode/__init__.py .")
 	os.system(f"cp -rf {file_path}/sourcecode/zzdlib.py .")
 	os.chdir(file_path)
+	print(f'VaspCZ python lib installed successfully.')
 
 
 
@@ -120,7 +130,7 @@ if __name__ == '__main__':
 	args = parser.parse_args()
 	Vaspsh_path = args.Vaspsh_path
 	Vasp_Pseudopotential_path = args.Vasp_Pseudopotential_path
-	print(f'prefx:{args.prefix}\nshortcut:{args.shortcut}\ninstall_vtst:{args.vtst}\nPseudopotential_path:{Vasp_Pseudopotential_path}')
+	print(f'prefix:{args.prefix}\nshortcut:{args.shortcut}\ninstall_vtst:{args.vtst}\nPseudopotential_path:{Vasp_Pseudopotential_path}')
 	# 安装程序
 	install(args.prefix, args.shortcut)
 	# 安装VaspCZ库
