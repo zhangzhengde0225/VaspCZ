@@ -34,6 +34,25 @@ def uninstall():
 		os.system(f'rm -rf VaspCZ')
 	print(f'{"":-<20}{"VaspCZ Uninstalled":^20}{"":-<}')
 
+	# 删除.bashrc路径
+	with open(f'{os.path.expanduser("~")}/.bashrc') as f:
+		data = f.readlines()
+	new_data = []
+	for i in range(len(data)):
+		line = data[i]
+		if '#VaspCZ' in line:
+			pass
+		elif f'{install_path}/VaspCZ' in line:
+			pass
+		elif '#vtst' in line:
+			pass
+		elif f'{install_path}/vtst' in line:
+			pass
+		else:
+			new_data.append(line)
+	with open(f'{os.path.expanduser("~")}/.bashrc', 'w') as f:
+		f.writelines(new_data)
+
 
 if __name__ == '__main__':
 	uninstall()
