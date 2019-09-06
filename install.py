@@ -118,7 +118,7 @@ if __name__ == '__main__':
 	args = parser.parse_args()
 	Vaspsh_path = args.Vaspsh_path
 	Vasp_Pseudopotential_path = args.Vasp_Pseudopotential_path
-	print(f'prefx:{args.prefix}\nshortcut:{args.shortcut}\ninstall_vtst:{args.vtst}\nPseudopotential_path:{}')
+	print(f'prefx:{args.prefix}\nshortcut:{args.shortcut}\ninstall_vtst:{args.vtst}\nPseudopotential_path:{Vasp_Pseudopotential_path}')
 	# 安装程序
 	install(args.prefix, args.shortcut)
 	# 安装VaspCZ库
