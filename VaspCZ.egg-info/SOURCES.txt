@@ -1,0 +1,8 @@
+README.md
+setup.py
+VaspCZ.egg-info/PKG-INFO
+VaspCZ.egg-info/SOURCES.txt
+VaspCZ.egg-info/dependency_links.txt
+VaspCZ.egg-info/not-zip-safe
+VaspCZ.egg-info/requires.txt
+VaspCZ.egg-info/top_level.txt
