@@ -19,7 +19,7 @@ print(f'{"lib path":<25}{lib_path}')
 
 
 def uninstall():
-	print(f'{"":-<20}{"VaspCZ Uninstalling...":^20}{"":-<}')
+	print(f'{"":-<20}{"VaspCZ Uninstalling...":^20}{"":-<20}')
 	# 卸载VaspCZ
 	current_path = os.getcwd()
 	os.chdir(install_path)
@@ -32,8 +32,8 @@ def uninstall():
 	os.chdir(lib_path)
 	if os.path.isdir('VaspCZ'):
 		os.system(f'rm -rf VaspCZ')
-	print(f'{"":-<20}{"VaspCZ Uninstalled":^20}{"":-<}')
 
+	print(f'remove path in .bashrc')
 	# 删除.bashrc路径
 	with open(f'{os.path.expanduser("~")}/.bashrc') as f:
 		data = f.readlines()
@@ -52,6 +52,8 @@ def uninstall():
 			new_data.append(line)
 	with open(f'{os.path.expanduser("~")}/.bashrc', 'w') as f:
 		f.writelines(new_data)
+
+	print(f'{"":-<20}{"VaspCZ Uninstalled":^20}{"":-<20}')
 
 
 if __name__ == '__main__':

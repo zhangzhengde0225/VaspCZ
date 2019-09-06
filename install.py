@@ -116,7 +116,10 @@ def install_lib(prefix):
 	os.chdir('VaspCZ')
 	os.system(f"cp -rf {file_path}/sourcecode/__init__.py .")
 	os.system(f"cp -rf {file_path}/sourcecode/zzdlib.py .")
-	os.system(f"cp -rf {prefix}/VaspCZ/sourcecode/ .")
+	if os.path.isdir('sourcecode'):
+		os.system('rm -rf sourcecode')
+	os.mkdir('sourcecode')
+	os.system(f"cp -rf {prefix}/VaspCZ/sourcecode/* ./sourcecode/")
 	os.chdir(file_path)
 	print(f'VaspCZ python lib installed successfully.\n')
 
