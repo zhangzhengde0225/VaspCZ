@@ -72,7 +72,7 @@ def install(prefix, shortcut):
 	global Vaspsh_path
 	global Vasp_Pseudopotential_path
 	with open('sourcecode/build-in_data.txt', 'w') as f:
-		f.writelines(f'Vaspsh_path={prefix}\n')
+		f.writelines(f'VaspCZ_path={prefix}/VaspCZ\n')
 		f.writelines(f'Vaspsh_path={Vaspsh_path}\n')
 		f.writelines(f'Vasp_Pseudopotential_path={Vasp_Pseudopotential_path}')
 

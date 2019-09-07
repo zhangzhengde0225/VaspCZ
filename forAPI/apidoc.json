@@ -1,0 +1,14 @@
+{
+  "name": "zzdlib",
+  "version": "1.0.2",
+  "description": "Python API of VaspCZ",
+  "title": "VaspCZ python lib",
+  "url" : "http://localhost:5000",
+  "sampleUrl": "http://localhost:5000",
+  "header": {
+    "title": "Overview",
+    "filename": "header.md"
+  },
+  "template": {"forceLanguage": "zh-cn"}
+}
+

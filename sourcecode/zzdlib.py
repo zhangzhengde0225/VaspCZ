@@ -37,6 +37,7 @@ def listSum(numlist):#输入是以数字或数字字符串组成的List,返回�
 		print('zzdlib函数listSum错误')
 	return sum
 
+
 class File():
 	def openFile(path,mode='r',data=None):
 		if mode == 'r':
