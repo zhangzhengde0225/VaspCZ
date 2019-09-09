@@ -177,16 +177,66 @@ class Vasp()
 类名。
 
 -----
+3.1
 ```angular2html
 VaspCZ.zzdlib.Vasp.decode_POSCAR(POSCAR):
 ```
 解码POSCAR，返回一个基矢、原子种类、原子数目、每个原子的位置（取前4位）
 
+- **POSCAR** : list
+
+    由File模块读取的POSCAR文件数据。
+
 - **return** : tuple
 
-    返回值。4个元素的元组。第一个元素为晶格基矢，3\3的numpy数组。第二个元素为原子种类，由元素名称符串组成的列表。第三个元素为原子数目，由整数组成的列表。第四个元素为原子位置，n*3的numpy数组，n是原子总数，每行是一个原子，一到三列分别为该原子x, y, z坐标。
+    返回值。4个元素的元组。第一个元素为晶格基矢，3\3的numpy数组。第二个元素为原子种类，由元素名称符串组成的列表。第三个元素为原子数目，由整数组成的一维numpy数组。第四个元素为原子位置，n*3的numpy数组，n是原子总数，每行是一个原子，一到三列分别为该原子x, y, z坐标。
+
+例子：读取和解码当前目录的POSCAR文件
+```angular2html
+import VaspCZ.zzdlib as zzd
+
+data = zzd.File.openFile('./POSCAR', 'r')  # 读取POSCAR文件数据
+res = zzd.Vasp.decode_POSCAR(data)  # 解码POSCAR
+print(f'{res[0]}\n{res[1]}\n{res[2]}\n{res[3]}')  # 打印解码后的数据
+```
+原POSCAR文件为：
+```angular2html
+Fe
+1.0
+  3.5239999294         0.0000000000         0.0000000000
+  0.0000000000         3.5239999294         0.0000000000
+  0.0000000000         0.0000000000         3.5239999294
+  Fe
+  4
+Direct
+0.000000000         0.000000000         0.000000000
+0.000000000         0.500000000         0.500000000
+0.500000000         0.000000000         0.500000000
+0.500000000         0.500000000         0.000000000
+```
+
+输出为：
+```angular2html
+res[0]:
+array([[3.52399993 0.         0.        ]
+ [0.         3.52399993 0.        ]
+ [0.         0.         3.52399993]])
+ 
+res[1]:
+['Fe']
+
+res[2]:
+array([4])
+
+res[3]:
+array([[0.  0.  0. ]
+ [0.  0.5 0.5]
+ [0.5 0.  0.5]
+ [0.5 0.5 0. ]])
+```
 
 -----
+3.2
 ```angular2html
 VaspCZ.zzdlib.Vasp.modify_POSCAR_ele(oldele, new_ele):
 ```
@@ -204,6 +254,7 @@ VaspCZ.zzdlib.Vasp.modify_POSCAR_ele(oldele, new_ele):
 - **return** : None
 
 ----
+3.3
 ```angular2html
 VaspCZ.zzdlib.Vasp.gennerate_POTCAR([elements=None, pseudotype='PBE']):
 ```
@@ -219,13 +270,38 @@ VaspCZ.zzdlib.Vasp.gennerate_POTCAR([elements=None, pseudotype='PBE']):
     可选。默认为PBE，从PseudoPotential/PBE文件夹下读取元素贋势。
     
 -----
+3.4
 ```angular2html
 modify_POSCAR_Selective_Dynamics(data, indexes)
 ```
 根据输入的数据和索引修改POSCAR，添加Selective Dynamics, 索引所在的位置设置为T T T, 其他位置设置为 F F F
-注意：indexes以POSCAR中一个原子所在位置为初始0
+
+- **data** : list
+
+    由File模块读取的POSCAR文件数据
+    
+- **indexes** : list
+
+    由索引组成的列表。
+    注意：indexes以POSCAR中一个原子所在位置为初始0
+
+- **return** : list
+
+    返回值。修改后的POSCAR文件数据。
+
+---
+3.5
+```angular2html
+modify_INCAR_for_vibration_analysis():
+```
+修改当前目录的INCAR为振动分析的INCAR并保存。
+修改内容包括：SYSTEM=Vib, NSW=1, POTIM=0.3, IBRION=5, NFREE=2, ISYM=0, PREC=Accurate。
+注意：在Opt的INCAR上进行修改。
+
+- **return** : None
 
 -----
+3.6
 ```angular2html
 VaspCZ.zzdlib.Vasp.checkInputs()
 ```
@@ -239,6 +315,7 @@ Vasp前检查。提交计算任务前，检查当前目录Vasp的各项输入文
     返回值。检查通过返回True, 未通过返回False
 
 ---
+3.7
 ```angular2html
 VaspCZ.zzdlib.Vasp.check_and_qsub([need_input=True]):
 ```
@@ -269,6 +346,7 @@ POSCAR原子:1种共计4个 Fe4   POTCAR原子:Fe   KPOINTS方法:Monkhorst 网�
 按回车即可提交任务，输入n或no，回车，不提交任务。
 
 --------
+3.8
 ```angular2html
 VaspCZ.zzdlib.Vasp.keepInputs([addfile=[], workdir='./']):
 ```
@@ -285,6 +363,7 @@ VaspCZ.zzdlib.Vasp.keepInputs([addfile=[], workdir='./']):
 - **return** : None
 
 ---
+3.9
 ```angular2html
 VaspCZ.zzdlib.Vasp.checkNEBperiod():
 ```
