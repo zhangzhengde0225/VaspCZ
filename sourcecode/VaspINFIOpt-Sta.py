@@ -34,7 +34,7 @@ for i in inl:
 				data_INCAR[nl] = 'IBRION=-1\n' #修改IBRION
 			if 'EDIFFG' in data_INCAR[nl]:
 				data_INCAR[nl] = '#'+data_INCAR[nl] #去掉EDIFFG
-	with open('./INCAR','w') as f:
+	with open('./INCAR', 'w') as f:
 		f.writelines(data_INCAR)
 		f.close()
 		print("修改"+i+"静态INCAR完成")

@@ -1,1 +1,1 @@
-__all__ = ['zzdlib']
+__all__ = ['zzdlib', 'VaspGenerate', 'utils']

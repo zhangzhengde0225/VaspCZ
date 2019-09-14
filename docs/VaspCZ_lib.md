@@ -189,7 +189,15 @@ VaspCZ.zzdlib.Vasp.decode_POSCAR(POSCAR):
 
 - **return** : tuple
 
-    返回值。4个元素的元组。第一个元素为晶格基矢，3\3的numpy数组。第二个元素为原子种类，由元素名称符串组成的列表。第三个元素为原子数目，由整数组成的一维numpy数组。第四个元素为原子位置，n*3的numpy数组，n是原子总数，每行是一个原子，一到三列分别为该原子x, y, z坐标。
+    返回值。4个元素的元组。
+    
+    第一个元素为晶格基矢，3\*3的numpy数组。
+    
+    第二个元素为原子种类，由元素名称符串组成的列表。
+    
+    第三个元素为原子数目，由整数组成的一维numpy数组。
+    
+    第四个元素为原子位置，n*3的numpy数组，n是原子总数，每行是一个原子，一到三列分别为该原子x, y, z坐标。
 
 例子：读取和解码当前目录的POSCAR文件
 ```angular2html
@@ -375,8 +383,8 @@ VaspCZ.zzdlib.Vasp.checkNEBperiod():
     返回值。列表，元素为内层列表，每一个NEB计算路径的结果作为内层列表，每个内层列表的元素为：NEB的路径、NEB阶段和状态、ini计算状态和fin计算状态。
 
 ---
+3.10
 ```angular2html
-
+VaspCZ.zzdlib.Vasp.check_WARNING_and_Energy(path='.'):
 ```
-
-
+检查输入路径下的结构优化是否完成，有无WARNING，并返回能量。

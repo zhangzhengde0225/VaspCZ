@@ -9,9 +9,7 @@ pseudopotential_path = '~'
 shortcut = 'vcz'  # 程序快捷键
 vtst = True  # 是否安装VTST tools工具
 
-
-
-__version__ = '1.0.1'
+__version__ = '1.0.2'
 
 
 def write_path_to_bashrc(path):
@@ -45,10 +43,16 @@ def install(prefix, shortcut):
 	os.mkdir('VaspCZ')
 	os.chdir('VaspCZ')
 
+	# 源文件
 	if os.path.isdir('sourcecode'):
 		os.system(f'rm -rf sourcecode')
 	os.mkdir('sourcecode')
 	os.system('cp -rf '+file_path+'/sourcecode/* ./sourcecode/')  # 拷贝源文件
+	# 例子
+	if os.path.isdir('examples'):
+		os.system(f'rm -rf examples')
+	os.mkdir(f'examples')
+	os.system(f'cp -rf {file_path}/examples/* ./examples/')
 
 	# 修改Main.py的表头
 	with open(f'sourcecode/VaspCZ{__version__}.py', 'r') as f:

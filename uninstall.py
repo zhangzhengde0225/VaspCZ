@@ -23,12 +23,12 @@ def uninstall():
 	# 卸载VaspCZ
 	current_path = os.getcwd()
 	os.chdir(install_path)
-	print('uninstall VaspCZ software')
+	print(f'uninstall VaspCZ software from {install_path}')
 	if os.path.isdir('VaspCZ'):
 		os.system(f'rm -rf VaspCZ')
 	if os.path.isdir('vtst'):
 		os.system(f'rm -rf vtst')
-	print(f'uninstall lib')
+	print(f'uninstall lib from {lib_path}')
 	os.chdir(lib_path)
 	if os.path.isdir('VaspCZ'):
 		os.system(f'rm -rf VaspCZ')

@@ -39,7 +39,7 @@ def listSum(numlist):#输入是以数字或数字字符串组成的List,返回�
 
 
 class File():
-	def openFile(path,mode='r',data=None):
+	def openFile(path, mode='r',data=None):
 		if mode == 'r':
 			with open(path,mode) as f:
 				data = f.readlines()
@@ -88,6 +88,22 @@ class File():
 			data =f.readlines()
 		Vaspsh_path = data[1].split('=')[1].strip('\n')
 		return Vaspsh_path
+
+	def VaspCZ_src_path():
+		return VaspCZ_path
+
+	def VaspCZ_software_path():
+		with open(f'{VaspCZ_path}/build-in_data.txt', 'r') as f:
+			data =f.readlines()
+		path = data[0].split('=')[1].strip('\n')
+		return path
+
+	def Vasp_pseudo_path():
+		with open(f'{VaspCZ_path}/build-in_data.txt', 'r') as f:
+			data =f.readlines()
+		line = File.getLine(data, 'Vasp_Pseudopotential_path')[0]
+		path = line.split('=')[1].strip('\n')
+		return path
 
 
 class Vasp():
@@ -204,19 +220,29 @@ class Vasp():
 						return status,runtime
 		return 'Not Found', '0'
 
-	def keepInputs(addfile=[],workdir='./'):
+	def keepInputs(addfile=[],workdir='./', need_confirm=True):
 		Flist = 'INCAR,POSCAR,POTCAR,KPOINTS,Vasp.sh'.split(',')
 		for File in addfile:
 			Flist.append(File)
-		print(Flist)
-		
-		dir = 'KeepInputsDir'
-		os.system('mkdir '+dir)
-		for File in Flist:
-			os.system('cp '+File+' ./'+dir)
-		os.system('rm *')
-		os.system('cp ./'+dir+'/* ./')
-		os.system('rm -rf '+dir)
+		print(f'Vasp keep inputs: 保留的文件: {Flist}')
+		if need_confirm:
+			files = os.listdir(workdir)
+			for i in range(len(files)):
+				if files[i] in Flist:
+					files.remove(files[i])
+			ipt = input(f'准备删除{workdir}下的文件：{files}\n是否删除([y]es/no): ')
+		else:
+			ipt = 'y'
+		if ipt in ['y', 'Y', 'yes', 'YES']:
+			dir = 'KeepInputsDir'
+			os.system('mkdir ' + dir)
+			for File in Flist:
+				os.system('cp ' + File + ' ./' + dir)
+			os.system('rm *')
+			os.system('cp ./'+dir+'/* ./')
+			os.system('rm -rf '+dir)
+		else:
+			print(f'未删除任何文件')
 			
 	def checkNEBperiod():
 		'''
@@ -347,13 +373,13 @@ class Vasp():
 		with open('./Vasp.sh', 'w') as f:
 			f.writelines(new_data)
 
-	def gennerate_POTCAR(elements=None, pseudotype='PBE'):
+	def generate_POTCAR(elements=None, pseudotype='PBE'):
 		if elements is None:
 			with open('POSCAR', 'r') as f:
 				data = f.readlines()
 			res = Vasp.decode_POSCAR(data)
 			elements = res[1]
-		path1 = os.path.join(os.environ['HOME'], 'PseudoPotential')
+		path1 = os.path.join(File.Vasp_pseudo_path(), 'PseudoPotential')
 		path2 = pseudotype
 		os.system('rm POTCAR')
 		for i in range(len(elements)):
@@ -368,8 +394,17 @@ class Vasp():
 				code = f'cat {path}/POTCAR >POTCAR' if i==0 else f'cat {path}/POTCAR >>POTCAR'
 				os.system(code)
 			else:
-				print(f'gennerate POTCAR error, element {elements[i]} not found')
-				exit()
+				raise NameError(f'gennerate POTCAR error, element "{elements[i]}" not found in path: {path}\n请正确配置贋势文件路径')
+
+	def generate_KPOINTS(vector='5 5 5', kptype='Monkhorst'):
+		data = []
+		data.append(f'{kptype} pack\n')
+		data.append('0\n')
+		data.append(f'{kptype}\n')
+		data.append(f'{vector}\n')
+		data.append(f'0. 0. 0.\n')
+		File.openFile('KPOINTS', 'w', data=data)
+
 
 	def modify_POSCAR_ele(oldele, new_ele):
 		"""

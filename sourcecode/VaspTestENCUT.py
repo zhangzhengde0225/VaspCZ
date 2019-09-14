@@ -1,8 +1,9 @@
 #!/home/zhangzhengde/bin/bin/python3
-#coding=utf-8
+# coding=utf-8
 
 import os
 import argparse
+import VaspCZ.zzdlib as zzd
 
 
 def modify_vasp_sh(jobname, nodes, ppn):
@@ -20,31 +21,33 @@ def modify_vasp_sh(jobname, nodes, ppn):
 		f.writelines(new_data)
 
 
-def run(jobname, nodes, ppn, K):
-	if os.path.isdir(K):  # 有目录什么也不做
-		print(f'k_mesh:{K} already exists, do nothing.')
+def run(jobname, nodes, ppn, encut):
+	input_files = 'INCAR,POSCAR,POTCAR,KPOINTS,Vasp.sh'.split(',')
+	for i in input_files:
+		if i not in os.listdir():
+			raise NameError(f'ENCUT Test: input file "{i}" missing in current dir.')
+	if os.path.isdir(encut):  # 有目录什么也不做
+		print(f'ENCUT:{encut} already exists, do nothing.')
 		pass
 	else:
-		os.system('mkdir '+K)  # 创建目录
+		os.system('mkdir '+encut)  # 创建目录
 		for file in os.listdir():
 			if os.path.isfile(file):
-				os.system(f'cp {file} {K}')# 拷贝输入文件
-		os.chdir(K)  # 进入创建的目录
-		# 无需修改INCAT
+				os.system(f'cp {file} {encut}')# 拷贝输入文件
+		os.chdir(encut)  # 进入创建的目录
+		# 需修改INCAR
+		data_INCAR = zzd.File.openFile('INCAR', 'r')
+		data_new = zzd.File.substituteData(data_INCAR, keywords='ENCUT', newline=f'ENCUT={encut}\n')
+		zzd.File.openFile('INCAR', 'w', data=data_new)
 		# 无需修改POTCAR
 		# 无需修改POSCAR
-		# 修改KPOINTS
-		with open('./KPOINTS', 'r') as f:
-			data = f.readlines()
-		data[3] = f'{K[0]} {K[1]} {K[2]}\n'
-		with open('./KPOINTS', 'w') as f:
-			f.writelines(data)
+		# 无需修改KPOINTS
 		# 修改Vasp.sh，指定任务和任务名，修改，提交任务
-		modify_vasp_sh(f'{jobname}_{K}', nodes, ppn)
+		modify_vasp_sh(f'{jobname}_{encut}', nodes, ppn)
 		# 测试代码，打印
 		#os.system('cat KPOINTS')
 		#os.system('cat Vasp.sh')
-		os.system('qsub Vasp.sh')  # 提交任务
+		zzd.Vasp.check_and_qsub()
 		os.chdir('..')
 
 
@@ -53,17 +56,17 @@ if __name__ == '__main__':
 	parser.add_argument('-jb', '--jobname_prefix', default='k_test', type=str)
 	parser.add_argument('-nd', '--nodes', default='1', type=str)
 	parser.add_argument('-np', '--ppn', default='8', type=str)
-	parser.add_argument('-k', '--k_mesh', default='111,333,555,777,999', type=str)
+	parser.add_argument('-EN', '--ENCUTs', default='200,250,300,350,400,450,500,550,600,650,700', type=str)
 	args = parser.parse_args()
 	jobname = args.jobname_prefix
 	nodes = args.nodes
-	k_mesh = args.k_mesh.split(',')
+	ENCUTs = args.ENCUTs.split(',')
 	ppn = args.ppn
-	print(f'running k_point test \n parameter: \njobname_prefix:{jobname} nodes:{nodes} ppn:{ppn} \nk_mesh:{k_mesh}')
+	print(f'running k_point test \n parameter: \njobname_prefix:{jobname} nodes:{nodes} ppn:{ppn} \nENCUTs:{ENCUTs}')
 
 	inp = input('confirm run ([y]es/no):  ')
 	if inp in ['', 'y', 'yes', 'Y', 'Yes', 'YES']:
-		for K in k_mesh:
-			run(jobname, nodes, ppn, K)
+		for encut in ENCUTs:
+			run(jobname, nodes, ppn, encut)
 	else:
 		print('Did not run.')
