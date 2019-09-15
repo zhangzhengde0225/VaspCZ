@@ -89,7 +89,8 @@ pip3 install numpy
 ```
 -------
 # 四、使用和示例
-## 1. VaspCZ 主程序
+本章主要描述软件部分的使用方法和示例，Python API接口部分仅描述功能，接口详细信息参见[API说明文档](https://github.com/zhangzhengde0225/VaspCZ/blob/master/docs/VaspCZ_lib.md)。
+## 1. VaspCZ 软件部分 (主程序)
 软件部分提供了Linux字符串用户界面，用于在超算平台中快捷提交任务和检查结果。包含三个模块：结构优化和静态计算(OS)模块、过渡态计算(NEB)模块和截断能K点测试(Test)模块。
 
 成功安装后输入快捷键即可进入用户界面：
@@ -99,7 +100,7 @@ vcz
 
 <img src="https://github.com/zhangzhengde0225/VaspCZ/blob/master/figs/VaspCZ_mainface.png" width="500" align=center>
 
-输入模块对应的选择即可进入相应模块。
+输入模块对应的选项即可进入相应模块。
 
 ### (1) Opt and Sta 模块
 
@@ -123,8 +124,8 @@ vcz
 1.8|后检查并打印计算结果
 
 
-#### 示例：
-进入到项目自带的examples：(如安装中改变了，请将"/home/zhangzd/bin"替换为你配置的主程序安装路径)
+#### OS模块功能示例：
+进入到项目自带的examples：(请将"/home/zhangzd/bin"替换你的VaspCZ安装路径)
 ```angular2html
 cd /home/zhangzd/bin/VaspCZ/examples/
 ```
@@ -144,19 +145,21 @@ vcz
 
 #### 1.1 产生Vasp输入文件(示例)
 
-会在该目录下产生Vasp的5个输入文件的例子：INCAR、POSCAR、POTCAR、KPOINTS和Vasp.sh
+会在该目录下产生Vasp的5个输入文件的示例：INCAR、POSCAR、POTCAR、KPOINTS和Vasp.sh
 
-其中，Vasp.sh为PBS系统提交任务的脚本，因不同平台的脚本内容会有所不同，请将适合该平台的脚本正确拷贝到安装目录下，默认为：用户根目录，目录结构如下所示：
+注意：生成Vasp.sh文件需要配置：Vasp.sh为PBS系统提交任务的脚本，因不同平台的脚本内容会有所不同，请将适合该平台的脚本正确拷贝到安装目录下，默认为：用户根目录，目录结构如下所示：
 ```angular2html
 用户根目录(或配置的Vasp.sh路径)
 |
 |   Vasp.sh
-|   ...
+|   ...(files)
 ```
 
 #### 1.2 修改INCAR为静态计算的INCAR
 
-在当前路径的结构优化INCAR上修改为静态计算的INCAR。修改项目：
+在当前路径的结构优化INCAR上修改为静态计算的INCAR。
+
+修改项目：
 
 ```angular2html
 SYSTEM=Static
@@ -182,12 +185,12 @@ NSW=1
     |   |
     |   +---H
     |   +---He
-    |   +---...
+    |   +---...(dirs)
     | 
     +---PW91
     +---LDA
     +---US_LDA_GGA
-    +---...
+    +---...(dirs)
 ```
 
 #### 1.4 产生KPOINTS
@@ -240,9 +243,9 @@ vcz
 
 <img src="https://github.com/zhangzhengde0225/VaspCZ/blob/master/figs/VaspCZ_1.8_output.png" width="700" align=center>
 
-检查所有路径计算是否完成，输出当前路径、离子步数和电子步数。
+检查所有路径计算是否完成，输出当前路径、完成状态、离子步数和电子步数。
 
-检查完后，输入当前路径、能量、离子步数、磁矩、POSCAR和CONTCAR原子之间的距离、原子最大受力。
+检查完后，输出当前路径、能量、离子步数、磁矩、POSCAR和CONTCAR原子之间的距离、原子最大受力。
 
 ------
 ### (2) NEB 模块
@@ -283,15 +286,15 @@ NEB计算目录
 
 计算步骤如下：
 
-1. ini/Opt/下进行初态的结构优化
+1. ini/Opt/下进行初态的结构优化。
 
-2. fin/Opt/下进行末态的结构优化
+2. fin/Opt/下进行末态的结构优化。
 
-3. ini/下在结构优化完成后进行静态计算以获得更准确的能量
+3. ini/下在结构优化完成后进行静态计算以获得更准确的能量。
 
 4. fin/下在结构优化完成后末态静态计算。
 
-5. 当前路径下在两个静态计算完成后进行过渡态计算
+5. 当前路径下在两个静态计算完成后进行过渡态计算。
 
 6. 如需，过渡态完成后当前路径下进行振动分析。
 
@@ -311,17 +314,15 @@ cd 2.1
 ```
 该文件夹下包含一般性的过渡态计算结构，且ini/Opt和fin/Opt下计算已完成。(可用OS模块的1.8功能检查结果)
 
-输入：
+调用vcz，选择功能2.1：
 ```angular2html
 vcz
+2
+1
 ```
-选择功能2.1
+此时：选择1为当前文件夹下的静态计算到结构优化，选择2为一键提交ini/和fin/文件下下的静态计算。
 
-再选择1为当前文件夹下的静态计算到结构优化。
-
-选择2为一键提交ini/和fin/文件下下的静态计算。
-
-可输入节点数、核数和文件名提交任务。默认为：
+输入节点数、核数和文件名提交任务。默认为：
 
 参数|默认值|
 :---:|:---:
@@ -340,7 +341,7 @@ cd 2.2
 
 输入vcz调用程序选择功能2.2即可实现自动提交过渡态计算任务。
 
-可输入节点数、核数和文件名提交任务。
+输入节点数、核数和文件名提交任务。
 
 默认参数为：
 
@@ -372,7 +373,7 @@ cd 2.3
 默认参数为：
 
 参数|默认值
-:---:|:---:he
+:---:|:---:
 节点数|1
 核数|8
 是否包含末态|False
@@ -389,7 +390,7 @@ cd 2.3
 
 删除当前目录下的文件和文件夹，仅保留ini/和fin/文件夹下所有内容。
 
-该功能英语过渡态计算错误时回滚到过渡态重新计算。调用NEB模块的2.2功能即可提交NEB任务。
+该功能英语过渡态计算错误时回滚到过渡态重新计算。删除后调用NEB模块的2.2功能即可重新提交NEB任务。
 
 #### 2.6 检查过渡态受力情况
 
@@ -426,7 +427,7 @@ vcz
 
 输出如图所示：
 
-<img src="https://github.com/zhangzhengde0225/VaspCZ/blob/master/figs/VaspCZ_2.2_output.png" width="500" align=center>
+<img src="https://github.com/zhangzhengde0225/VaspCZ/blob/master/figs/VaspCZ_2.7_output.png" width="500" align=center>
 
 第一列是POSCAR或CONTCAR，第二列是IMAGE，第三列是原子距离和。其值来自于vtst工具，如第一行的值为：
 ```angular2html
@@ -599,6 +600,9 @@ import VaspCZ.zzdlib as zzd
 3.8|VaspCZ.zzdlib.Vasp.keepInputs([addfile=[], workdir='./'])|删除工作目录下的文件，仅保留输入文件。默认保留文件为：INCAR，POSCAR，POTCAR， KPOINTS和Vasp.sh
 3.9|VaspCZ.zzdlib.Vasp.checkNEBperiod()|遍历当前路径下的所有文件夹，如果发现有neb计算，判断ini和fin分别的计算周期，并返回
 
+-----
+# 五、其他说明
+该项目已免费开源，[开源许可]()
 
 
 当前版本: 1.0.1
