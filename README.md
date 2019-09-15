@@ -279,52 +279,22 @@ NEB计算目录
     +---Opt
         | ...(files)
 ```
-在准备进行过渡态计算的目录下，创建文件夹ini和fin分别代表初态和末态，在它们之下再分别创建Opt文件夹。计算步骤如下：
+在准备进行过渡态计算的目录下，创建文件夹ini和fin分别代表初态和末态，在它们之下再分别创建Opt文件夹。
 
-```markflow
-st=>start:Start
-e=>End
+计算步骤如下：
+
+```mermaid
+flowchat
+st=>start: 开始
 op=>operation: My Operation
 cond=>condition: Yes or No?
-inp=>Input
-
+e=>end
 st->op->cond
 cond(yes)->e
-cond(no)->inp->op
-```
-```flow
-st=>start: index
-op=>operation: 申请
-op2=>operation: 结果页
-op3=>operation: 查询本地
-i1=>inputoutput: bid入库
-i2=>inputoutput: 填写个人信息
-c1=>condition: 检查登录
-c2=>condition: 登录
-c3=>condition: 查询本地记录
-c4=>condition: 检测状态
-c5=>operation: 风控审核
-e=>end
-
-st->op->c1()
-c1(no)->c2(yes)->op()
-c1(yes)->c3(no)->i1(right)->i2(right)->c5()->op2->e
-c1(yes)->c3(yes)->c4(no)->i2
-c1(yes)->c3(yes)->c4(yes)->op3->op2
-c3()->e
+cond(no)->op
 ```
 
-```flow
-sequenceDiagram
-    Alice ->> Bob: Hello Bob, how are you?
-    Bob-->>John: How about you John?
-    Bob--x Alice: I am good thanks!
-    Bob-x John: I am good thanks!
-    Note right of John: Bob thinks a long<br/>long time, so long<br/>that the text does<br/>not fit on a row.
 
-    Bob-->Alice: Checking with John...
-    Alice->John: Yes... John, how are you?
-```
 1. ini/Opt/下进行初态的结构优化
 
 2. fin/Opt/下进行末态的结构优化
