@@ -69,6 +69,6 @@ if __name__ == '__main__':
 	parser.add_argument('-p', '--isprint', type=bool, default=True)
 	args = parser.parse_args()
 	isprint = args.isprint
-	print(f'{"":-<30}{"开始检查振动分析结果":^30}{"":<30}')
+	print(f'{"":-<20}{"开始检查振动分析结果":^20}{"":-<20}')
 	run_walk(isprint=isprint)
-	print(f'{"":-<30}{"检查结束":^30}{"":<30}')
+	print(f'{"":-<20}{"检查结束":^20}{"":-<20}')

@@ -268,8 +268,10 @@ def deal_with_neb_vibration_analysis():
 		'Exit',
 		'The vibration analysis will be preformed after NEB calculation is Done.',
 		'The attempt frequency of migration atom in initial, saddle and finnal state will be calculated.',
-		'Default setting is: 1 8 False, which means 1 nodes 8 ppn and do not include finnal state.',
-		'Change setting by input like: nodes ppn True(or False)'
+		'Default nodes:          1',
+		'Default ppn:            8',
+		f'Defacult cal fin:  False (do not include finnal state)',
+		'Change settings by input like: nodes ppn True(or False)'
 	])
 	ipt = input(gui_string(
 		title='NEB Vibration Analysis',
@@ -278,7 +280,7 @@ def deal_with_neb_vibration_analysis():
 	if ipt == '0':
 		return None
 	elif ipt == '':
-		nodes, ppn, include = (1, 8, False)
+		nodes, ppn, include = ('1', '8', 'False')
 	else:
 		try:
 			nodes, ppn, include = ipt.split()[0], ipt.split()[1], ipt.split()[2]
