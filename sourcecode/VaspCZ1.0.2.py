@@ -42,7 +42,10 @@ def run():
 			while True:
 				ipt1 = input(utils.gui_string(
 					'Optimization and Static calculation', content=content_os))
-				ipt1 = content_os[int(ipt1)]
+				try:
+					ipt1 = content_os[int(ipt1)]
+				except Exception as e:
+					print(f'OS module 功能{e}选择错误，请正确输入.')
 				if ipt1 == 'Generate inputs (example)':
 					VaspGenerate.generate_inputs(examp='fcc_Fe_3x3x3')
 					exit()
@@ -98,18 +101,20 @@ def run():
 					subprocess.call(f'{python} {VaspCZ_path}/VaspNEBKeepINFI_OptInputs.py', shell=True)
 					exit()
 				elif ipt2 == 'NEB Keep Inputs':
-					subprocess.call(f'{python} {VaspCZ_path}/NEBKeepInputs.py', shell=True)
+					subprocess.call(f'{python} {VaspCZ_path}/VaspNEBKeepInputs.py', shell=True)
 				elif ipt2 == 'NEB Check RMS':
-					subprocess.call(f'{python} {VaspCZ_path}/VaspNEBCheckRMS.py')
+					subprocess.call(f'{python} {VaspCZ_path}/VaspNEBCheckRMS.py', shell=True)
 				elif ipt2 == 'NEB Check Dist':
 					ipt2_nebcd = input('Check ([POS]/CONT):  ')
 					pos_or_cont = 'POSCAR' if (ipt2_nebcd == 'POS' or ipt2_nebcd == '') else 'CONTCAR'
-					subprocess.call(f'{python} {VaspCZ_path}/VaspNEBCheckDist.py --POSorCONT={pos_or_cont}')
+					subprocess.call(f'{python} {VaspCZ_path}/VaspNEBCheckDist.py --POSorCONT={pos_or_cont}', shell=True)
+					exit()
 				elif ipt2 == 'NEB Check Results':
 					utils.deal_with_neb_check_results()
 				elif ipt2 == 'NEB Check Vibration Results':
 					code = [sys.executable, f'{VaspCZ_path}/VaspVibAna_Result.py', '--isprint=True']
 					subprocess.call(code, shell=False)
+					exit()
 				else:
 					pass
 		elif ipt == 'Test module':

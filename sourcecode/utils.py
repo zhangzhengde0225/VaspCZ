@@ -135,14 +135,14 @@ def deal_with_gen_vasp_sh():
 		f'The Vasp.sh file will be generated from template: {path}',
 		f'{"Default nodes:":<20}{"1":>10}',
 		f'{"Default ppn:":<20}{"12":>10}',
-		f'{"Default job name:":<20}{"jobname":>10}',
+		f'{"Default job name:":<20}{"vaspjob":>10}',
 		f'Change settings by input like: 1 12 jobname'
 	])
 	ipt = input(gui_string(title='Generate Vasp.sh', content=content, mode='string'))
 	if ipt == '0':
 		return None
 	elif ipt == '':
-		nodes, ppn, jobname = ('1', '12', 'vaspjob')
+		nodes, ppn, jobname = ('1', '12', 'vaspjob')/public/home/yangyuqi/bin/VaspCZ/sourcecode
 	else:
 		try:
 			nodes, ppn, jobname = ipt.split()
@@ -197,7 +197,7 @@ def deal_with_neb_opt_sta():
 		if ipt == '0':
 			break
 		elif ipt == '1' or ipt == '':
-			subprocess.call(f'{python} {VaspCZ_path}/VaspOpt-Sta.py')
+			subprocess.call(f'{python} {VaspCZ_path}/VaspOpt-Sta.py', shell=True)
 			exit()
 		elif ipt == '2':
 			content2 = zip_content([
@@ -265,7 +265,7 @@ def deal_with_neb_vibration_analysis():
 		except Exception as e:
 			raise NameError(f'{e} deal_with_neb_vibration_analysis error, 输入错误')
 	subprocess.call(
-		f'{python} {VaspCZ_path}/VaspVibAna_forNEB.py --nodes={nodes} --ppn={ppn} --include_fin={include}')
+		f'{python} {VaspCZ_path}/VaspVibAna_forNEB.py --nodes={nodes} --ppn={ppn} --include_fin={include}', shell=True)
 
 
 def deal_with_neb_check_results():

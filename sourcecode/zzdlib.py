@@ -227,10 +227,13 @@ class Vasp():
 		print(f'Vasp keep inputs: 保留的文件: {Flist}')
 		if need_confirm:
 			files = os.listdir(workdir)
+			del_files = []
 			for i in range(len(files)):
 				if files[i] in Flist:
-					files.remove(files[i])
-			ipt = input(f'准备删除{workdir}下的文件：{files}\n是否删除([y]es/no): ')
+					pass
+				else:
+					del_files.append(files[i])
+			ipt = input(f'准备删除{workdir}下的文件：{del_files}\n是否删除([y]es/no): ')
 		else:
 			ipt = 'y'
 		if ipt in ['y', 'Y', 'yes', 'YES']:
