@@ -5,11 +5,11 @@ VaspCZ(Vasp Check by Zzd)是作者在读博期间为提高科研效率而开发�
 软件部分提供了Linux字符串用户界面，用于在超算平台中快捷提交任务和检查结果。包含三个模块：结构优化和静态计算(OS)模块、过渡态计算(NEB)模块和测试(Test)模块。
 
 API部分为有python基础的研究者开发，以python库的形式便捷调用相关功能，以实现自定义高通量计算。[API说明文档](https://github.com/zhangzhengde0225/VaspCZ/blob/master/docs/VaspCZ_lib.md)
-
+--------
 # 二、程序框架
 
 xxxx
-
+---------
 # 三、安装
 ## 1. 安装和卸载
 代码下载：
@@ -88,7 +88,7 @@ ModuleNotFoundError: No module named 'numpy'
 ```angular2html
 pip3 install numpy
 ```
-
+-------
 # 四、使用和示例
 ## 1. VaspCZ linux 主程序
 提供了Linux字符串用户界面，用于在超算平台中快捷提交任务和检查结果。包含三个模块：结构优化和静态计算(OS)模块、过渡态计算(NEB)模块和测试(Test)模块。
@@ -104,13 +104,144 @@ vcz
 
 ### (1) Opt and Sta 模块
 
-该模块提供了用于快捷进行结构优化计算和静态计算(即自洽计算)的功能。
+该模块提供了用于快捷进行结构优化(Optimization)计算和静态(Static)计算的功能。
+
+<img src="https://github.com/zhangzhengde0225/VaspCZ/blob/master/figs/VaspCZ_OS_module.png" width="500" align="center">
+
+#### 例如：
+进入到项目自带的examples：(如安装中改变了，请将"/home/zhangzd/bin"替换为你配置的主程序安装路径)
+```angular2html
+cd /home/zhangzd/bin/VaspCZ/examples/
+```
+------
+OS模块下1.1-1.7功能示例：
+进入1.1-1.7
+```angular2html
+cd 1.1-1.7
+```
+该文件夹为空文件夹。
+输入：
+```angular2html
+vcz
+1
+```
+而后输入1-7数字可以执行相应功能
+
+#### 1.1 产生Vasp输入文件(示例)
+
+会在该目录下产生Vasp的5个输入文件的例子：INCAR、POSCAR、POTCAR、KPOINTS和Vasp.sh
+
+其中，Vasp.sh为PBS系统提交任务的脚本，因不同平台的脚本内容会有所不同，请将适合该平台的脚本正确拷贝到安装目录下，默认为：用户根目录
+```angular2html
+用户根目录(或配置的Vasp.sh路径)
+|
+|   Vasp.sh
+|   ...
+```
+
+#### 1.2 修改INCAR为静态计算的INCAR
+
+在结构优化的INCAR上修改为静态计算的INCAR。修改项目：
+
+```angular2html
+SYSTEM=Static
+IBRION=-1
+NSW=1
+# EDIFFG=-0.01
+```
+
+#### 1.3 产生POTCAR
+
+输入元素列表和贋势类型产生POTCAR。
+
+默认产生适配当前目录下的POSCAR内的元素的POTCAR，默认贋势类型为PBE。
+
+注意：将从安装VaspCZ是配置的贋势路径下读取数据，默认为用户根目录。使用该功能请将贋势文件夹命名为PseudoPotential并按如下目录安装。
+
+```
+用户根目录(或配置贋势安装路径)
+|   
++---PseudoPotential
+    |
+    +---PBE
+    |   |
+    |   +---H
+    |   +---He
+    |   +---...
+    | 
+    +---PW91
+    +---LDA
+    +---US_LDA_GGA
+    +---...
+```
+
+#### 1.4 产生KPOINTS
+
+输入网格和方法产生KPOINTS文件。
+
+默认网格为：5 5 5 
+
+默认方法为：Monkhorst 与Vasp官网一致，方法可只输入开头的字母如：M，可选方法有：M(Monkhorst)，A(Auto)
+
+#### 1.5 产生Vasp.sh
+
+输入任务所需节点数、核数和任务名产生计算平台提交任务脚本Vasp.sh。
+
+默认：节点数：1 核数：12 任务名：jobname
+
+注意：将从VaspCZ安装时候配置的Vasp.sh路径下读取数据，默认为用户根目录。使用该功能前请正确安装Vasp.sh
+
+#### 1.6 保留Vasp输入文件
+
+删除文件，仅保留Vasp的5个输入文件(INCAR、POSCAR、POTCAR、KPOINTS和Vasp.sh)，用于计算出现问题，重新算。
+
+可以输入文件名添加需要额外保留的文件。
+
+#### 1.7 前检查并提交任务
+
+准备好输入文件后，进行前检查，检查INCAR、POSCAR和POTCAR是否匹配，检查通过后将打印检查信息，并提示是否提交任务。
+
+-----
+OS模块下1.8功能示例：
+退出1.1-1.7并进入1.8
+```angular2html
+cd ..
+cd 1.8
+```
+该文件夹为计算好的Fe-Te体系不同情形下的结构优化结果。
+
+输入指定1.8功能：
+```angular2html
+vcz
+1
+8
+```
+
+#### 1.8 检查结果
+
+检查当前目录及所有子目录下的结构优化和静态计算的结果，如OUTCAR或者log中有错误(ERROR)或警告(WARNING)或提示所在位置。
+
+输出如图所示：
+<img src="">
+
+检查所有路径计算是否完成，输出当前路径、离子步数和电子步数。
+
+检查完后，输入当前路径、能量、离子步数、磁矩、POSCAR和CONTCAR原子之间的距离、原子最大受力。
+
+### (2) NEB 模块
+该模块提供了便捷的NEB计算功能。
+
+功能如图所示：
+<img src="https://github.com/zhangzhengde0225/VaspCZ/blob/master/figs/VaspCZ_NEB_module.png" width="500" align=center>
 
 
-例如：
+#### 例子：
+进入到VaspCZ安装目录examples文件夹下：
+```angular2html
+cd /home/zhangzd/bin/VaspCZ/examples
+```
 
 
-##【各个模块功能介绍】
 
 ## 2. VaspCZ python API
 

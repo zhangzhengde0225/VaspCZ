@@ -12,6 +12,13 @@ def generate_inputs(examp='fcc_Fe_3x3x3'):
 	for file in 'INCAR,POSCAR,POTCAR,KPOINTS'.split(','):
 		os.system(f'cp {path}/examples/{examp}/{file} .')
 		print(f'生成文件：{file} (example)')
+	vaspsh_path = zzd.File.Vaspsh_path()
+	if 'Vasp.sh' not in os.listdir(vaspsh_path):
+		print(f'在路径"{vaspsh_path}"下未找到Vasp.sh文件，请正确配置')
+	else:
+		os.system(f'cp {vaspsh_path}/Vasp.sh .')
+		print(f'生成文件：Vasp.sh (example)')
+
 
 
 def generate_INCAR_for_Sta():
