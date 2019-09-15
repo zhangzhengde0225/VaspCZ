@@ -46,7 +46,8 @@ python3 install.py
 ```angular2html
 vcz
 ```
-
+程序界面如图：
+![程序主界面]{}
 
 卸载：
 ```angular2html
@@ -54,7 +55,7 @@ python3 uninstall.py
 ```
 
 ## 2. 错误提示
-(1). 权限不足
+(1) 权限不足
 
 如果安装时提示：
 ```angular2html
@@ -68,9 +69,22 @@ sudo python3 install.py
 
 [python官网](https://www.python.org)
 
-[源码安装python教程]()
+[源码安装python教程](https://github.com/zhangzhengde0225/VaspCZ/blob/master/docs/python3_install_tutorial.md)
 
-(2)
+(2) 缺少python库
+
+VaspCZ运行需要的库有：
+```angular2html
+numpy
+```
+如果提示：
+```angular2html
+ModuleNotFoundError: No module named 'numpy'
+```
+使用pip3安装相应库即可：
+```angular2html
+pip3 install numpy
+```
 
 # 四、使用
 ## 1. VaspCZ linux 主程序
