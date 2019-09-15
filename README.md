@@ -50,11 +50,9 @@ vcz
 
 <img src="https://github.com/zhangzhengde0225/VaspCZ/blob/master/figs/VaspCZ_mainface.png" width="500" align=center>
 
+如出现程序界面，说明安装成功。
 
-
-
-
-卸载：
+如更新版本，安装前请先卸载：
 ```angular2html
 python3 uninstall.py
 ```
@@ -91,7 +89,7 @@ ModuleNotFoundError: No module named 'numpy'
 pip3 install numpy
 ```
 
-# 四、使用
+# 四、使用和示例
 ## 1. VaspCZ linux 主程序
 提供了Linux字符串用户界面，用于在超算平台中快捷提交任务和检查结果。包含三个模块：结构优化和静态计算(OS)模块、过渡态计算(NEB)模块和测试(Test)模块。
 
@@ -100,9 +98,17 @@ pip3 install numpy
 vcz
 ```
 
+<img src="https://github.com/zhangzhengde0225/VaspCZ/blob/master/figs/VaspCZ_mainface.png" width="500" align=center>
+
+输入模块对应的选择即可进入相应模块。
 
 ### (1) Opt and Sta 模块
-    
+
+该模块提供了用于快捷进行结构优化计算和静态计算(即自洽计算)的功能。
+
+
+例如：
+
 
 ##【各个模块功能介绍】
 
