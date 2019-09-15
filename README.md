@@ -1,15 +1,15 @@
-# 一、简介：
+# 一、简介
 
 VaspCZ(Vasp Check by Zzd)是作者在读博期间为提高科研效率而开发的Vasp辅助程序。该程序包换软件部分和API部分。
 
 软件部分提供了Linux字符串用户界面，用于在超算平台中快捷提交任务和检查结果。包含三个模块：结构优化和静态计算(OS)模块、过渡态计算(NEB)模块和测试(Test)模块。
 
-API部分为有python基础的研究者开发，以python库的形式便捷调用相关功能，以实现自定义高通量计算。[API说明文档](https://github.com/zhangzhengde0225/VaspCZ/blob/master/docs/VaspCZ_lib.md)
+API部分软件部分的底层，是自己写的一个python库。为有python基础的研究者开发提供了调用相关功能的接口，可以实现自定义计算和编写上层应用。[API说明文档](https://github.com/zhangzhengde0225/VaspCZ/blob/master/docs/VaspCZ_lib.md)
 
 --------
 # 二、程序框架
-
 xxxx
+
 ---------
 # 三、安装
 ## 1. 安装和卸载
