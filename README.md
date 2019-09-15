@@ -427,7 +427,7 @@ vcz
 
 输出如图所示：
 
-<img src="https://github.com/zhangzhengde0225/VaspCZ/blob/master/figs/VaspCZ_2.7_output.png" width="500" align=center>
+<img src="https://github.com/zhangzhengde0225/VaspCZ/blob/master/figs/VaspCZ_2.7_output.png" width="300" align=center>
 
 第一列是POSCAR或CONTCAR，第二列是IMAGE，第三列是原子距离和。其值来自于vtst工具，如第一行的值为：
 ```angular2html
@@ -528,7 +528,9 @@ vcz
 核数|8
 截断能列表|200,250,300,350,400,450,500,550,600,650,700
 
-注意：截断能列表以英文逗号隔开，提交任务后会以截断能为名创建文件夹，在每个文件夹内修改INCAR文件中的ENCUT为对应值，而后提交结构优化任务，任务名为任务名前缀+截断能。
+注意：截断能列表以英文逗号隔开。
+
+提交任务后会以截断能为名创建文件夹，在每个文件夹内修改INCAR文件中的ENCUT为对应值，而后提交结构优化任务，任务名为任务名前缀+截断能。
 
 计算完成后，可以使用OS模块的1.8功能检查各截断能时体系的总能，体系总能之差小于0.001 eV时，该截断能可选为合适的截断能。
 
@@ -556,15 +558,18 @@ vcz
 核数|8
 K点列表|111,333,555,777,999
 
-注意：K点列表以英文逗号隔开，提交任务后会以K点为名创建文件夹，在每个文件夹内KPOINTS文件中的网格为K点，而后提交结构优化任务，任务名为任务名前缀+K点。
+注意：K点列表以英文逗号隔开。
+
+提交任务后会以K点为名创建文件夹，在每个文件夹内KPOINTS文件中的网格为K点，而后提交结构优化任务，任务名为任务名前缀+K点。
 
 计算完成后，可以使用OS模块的1.8功能检查各K点时体系的总能。
 
+-----
 ## 2. VaspCZ python API
-API部分为有python基础的研究者开发，以python库的形式便捷调用相关功能，以实现自定义高通量计算。库名：VaspCZ.zzdlib，包含：shell模块，File模块和Vasp模块
+python API部分为有python基础的研究者提供了本项目同通用功能的接口。通过库便捷调用相关功能，以实现自定义高通量计算。库名：VaspCZ.zzdlib，包含：shell模块，File模块和Vasp模块
 
 ### 安装和导入
-安装见本说明第三章。
+安装软件时自动安装库，安装说明见本说明第三章。
 
 导入：进入python3交互界面或在.py文件中导入库：
 ```angular2html
@@ -603,6 +608,13 @@ import VaspCZ.zzdlib as zzd
 -----
 # 五、其他说明
 该项目已免费开源，[开源许可]()
+
+如遇bug，敬请将说明、提示代码、截图等信息上报到drivener@163.com
+
+如对程序有疑问，请联系drivener@163.com
+
+欢迎开发和补充，如用于商业用途请注明出处。
+
 
 
 当前版本: 1.0.1
