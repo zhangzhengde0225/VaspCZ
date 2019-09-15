@@ -39,12 +39,12 @@ for i in inl:
 		f.writelines(data_INCAR)
 		f.close()
 		print("修改"+i+"静态INCAR完成")
+	vaspsh_path = zzdlib.File.Vaspsh_path()
+	os.system(f'cp {vaspsh_path}/Vasp.sh .')
 	data_Sh = zzdlib.File.openFile('./Vasp.sh','r')
 	# 修改任务名
 	# oldname = zzdlib.File.getLine(data_Sh,'#PBS -N')[0].strip('\n').split()[-1]
 	# jobname = oldname[:-1]+'S'
-	vaspsh_path = zzdlib.File.Vaspsh_path()
-	os.system(f'cp {vaspsh_path}/Vasp.sh .')
 	jobname = args.jobname
 	data_Sh = zzdlib.File.substituteData(data_Sh,'#PBS -N', ' #PBS -N '+jobname)
 	# 修改nodes

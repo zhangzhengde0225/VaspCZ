@@ -234,7 +234,7 @@ def deal_with_neb_opt_sta():
 def deal_with_neb_sta_neb():
 	data_Vaspsh = zzd.File.openFile('./ini/Opt/Vasp.sh', 'r')
 	d_jobname = zzd.File.getLine(data_Vaspsh, '#PBS -N')[0].strip('\n').split()[-1]
-	d_jobname = f'{d_jobname[:-2]}NEB'
+	d_jobname = f'{d_jobname[:-1]}N'
 	d_nodes = zzd.File.getLine(data_Vaspsh, '#PBS -l nodes')[0].strip('\n').split()[-1].split(':')[0].split('=')[-1]
 	d_ppn = zzd.File.getLine(data_Vaspsh, '#PBS -l nodes')[0].strip('\n').split()[-1].split(':')[-1].split('=')[-1]
 

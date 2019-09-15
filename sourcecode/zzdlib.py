@@ -225,14 +225,16 @@ class Vasp():
 		for File in addfile:
 			Flist.append(File)
 		print(f'Vasp keep inputs: 保留的文件: {Flist}')
+
+		files = os.listdir(workdir)
+		del_files = []
+		for i in range(len(files)):
+			if files[i] in Flist:
+				pass
+			else:
+				del_files.append(files[i])
+
 		if need_confirm:
-			files = os.listdir(workdir)
-			del_files = []
-			for i in range(len(files)):
-				if files[i] in Flist:
-					pass
-				else:
-					del_files.append(files[i])
 			if len(del_files) == 0:
 				ipt = 'no'
 				pass
@@ -242,13 +244,8 @@ class Vasp():
 			ipt = 'y'
 		ipt = 'y' if ipt == '' else ipt
 		if ipt in ['y', 'Y', 'yes', 'YES']:
-			dir = 'KeepInputsDir'
-			os.system('mkdir ' + dir)
-			for File in Flist:
-				os.system('cp ' + File + ' ./' + dir)
-			os.system('rm *')
-			os.system('cp ./'+dir+'/* ./')
-			os.system('rm -rf '+dir)
+			for file in del_files:
+				os.system(f'rm -rf {file}')
 		else:
 			print(f'未删除任何文件')
 			
