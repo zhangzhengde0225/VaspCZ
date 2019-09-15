@@ -45,4 +45,6 @@ if ipt in ['y', 'yes', 'Y', 'YES']:
 		for file in need_del_files:
 			os.system(f'rm -rf {file}')
 		os.chdir('../..')
+else:
+	print(f'未删除任何东西')
 

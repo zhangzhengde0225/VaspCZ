@@ -59,8 +59,6 @@ def get_saddle_image():
 
 
 def run(include_fin=False):
-	include_fin = True if include_fin == 'True' else include_fin
-	include_fin = False if include_fin == 'False' else include_fin
 	# 检查NEB是否完成
 	out = subprocess.check_output([python, f'{VaspCZ_path}/NEBCheck1.1.py'], shell=False, stderr=subprocess.STDOUT).decode('utf-8')
 	isDone = bool([0 if out.find(f'Path:{"./":<40}  NEB计算完成!')==-1 else 1][0])
@@ -162,8 +160,9 @@ if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='manual to this script')
 	parser.add_argument('-nd', '--nodes', type=str, default='1')
 	parser.add_argument('-np', '--ppn', type=str, default='8')
-	parser.add_argument('-fin', '--include_fin', type=bool, default='False')
+	parser.add_argument('-fin', '--include_fin', type=str, default='False')
 	args = parser.parse_args()
 	nodes = args.nodes
 	ppn = args.ppn
-	run(include_fin=args.include_fin)
+	include_fin = bool(args.include_fin)
+	run(include_fin=include_fin)

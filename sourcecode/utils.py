@@ -313,17 +313,17 @@ def deal_with_test_kpoints():
 	content = zip_content([
 		'Exit',
 		'The KPOINT test will be performed when the five input files in current dir (INCAR, POSCAR, POTCAR, KPOINTS, Vasp.sh)',
-		'Default setting jobname prefix:      k_test',
+		'Default setting jobname prefix:      ktest_',
 		'Default setting nodes:                    1',
 		'Default setting ppn:                      8',
 		'Default setting k_mesh: 111,333,555,777,999',
-		'Change settings by input like: k_test 1 8 111,333,555,777,999'
+		'Change settings by input like: ktest_ 1 8 111,333,555,777,999'
 	])
 	ipt = input(gui_string(title='Vasp KPOINTS Test', content=content, mode='string'))
 	if ipt == '0':
 		return None
 	elif ipt == '':
-		prefix, nodes, ppn, k_mesh = ('k_test', '1', '8', '111,333,555,777,999')
+		prefix, nodes, ppn, k_mesh = ('ktest_', '1', '8', '111,333,555,777,999')
 	else:
 		try:
 			prefix, nodes, ppn, k_mesh = ipt.split()[0], ipt.split()[1], ipt.split()[2], ipt.split()[3]

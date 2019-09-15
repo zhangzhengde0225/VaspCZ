@@ -44,6 +44,7 @@ class VaspCZ.zzdlib.File()
 集成文件处理功能。
 
 ------
+2.1
 ```angular2html
 VaspCZ.zzdlib.File.openFile(path, [mode='r', data=None])
 ```
@@ -66,6 +67,7 @@ VaspCZ.zzdlib.File.openFile(path, [mode='r', data=None])
     返回值。读取模式返回该文件每一行组成的列表，写入模式无返回
 
 ---
+2.2
 ```
 VaspCZ.zzdlib.File.substitudeData(data, keywords, newline, [mode='default'])
 ```
@@ -102,7 +104,7 @@ zzd.File.openFile('INCAR', 'w', data=newdata)
 ```
 
 ---------------
-
+2.3
 ```
 VaspCZ.zzdlib.File.getLine(data,keywords)
 ```
@@ -122,7 +124,7 @@ VaspCZ.zzdlib.File.getLine(data,keywords)
     返回值。元组，第一个元素是该行字符串，不带换行符\n，第二个元素是该行所在的索引。如为找到匹配的关键词，则返回为('Not Match', 0)
   
 ------
-
+2.4
 ```angular2html
 VaspCZ.zzdlib.getAllline(data, keywords)
 ```
@@ -142,7 +144,7 @@ VaspCZ.zzdlib.getAllline(data, keywords)
     返回值。所有有关键词的行组成的列表，注意每个行的换行符\n保留。    
     
 ---
-
+2.5
 ```angular2html
 VaspCZ.zzdlib.getNullline(data)
 ```
@@ -158,7 +160,7 @@ VaspCZ.zzdlib.getNullline(data)
     返回值。所有空行存在的的索引组成的列表。
    
 ---
-
+2.6
 ```angular2html
 VaspCZ.zzdlib.Vaspsh_path()
 ```
@@ -179,7 +181,7 @@ class Vasp()
 -----
 3.1
 ```angular2html
-VaspCZ.zzdlib.Vasp.decode_POSCAR(POSCAR):
+VaspCZ.zzdlib.Vasp.decode_POSCAR(POSCAR)
 ```
 解码POSCAR，返回一个基矢、原子种类、原子数目、每个原子的位置（取前4位）
 
@@ -246,7 +248,7 @@ array([[0.  0.  0. ]
 -----
 3.2
 ```angular2html
-VaspCZ.zzdlib.Vasp.modify_POSCAR_ele(oldele, new_ele):
+VaspCZ.zzdlib.Vasp.modify_POSCAR_ele(oldele, new_ele)
 ```
 
 修改当前路径下POSCAR的原子种类，适合批量修改。
@@ -264,7 +266,7 @@ VaspCZ.zzdlib.Vasp.modify_POSCAR_ele(oldele, new_ele):
 ----
 3.3
 ```angular2html
-VaspCZ.zzdlib.Vasp.gennerate_POTCAR([elements=None, pseudotype='PBE']):
+VaspCZ.zzdlib.Vasp.gennerate_POTCAR([elements=None, pseudotype='PBE'])
 ```
 
 在当前路径生成POTCAR文件，需要在安装中正确是指贋势文件目录，默认贋势文件目录为用户根目录。贋势目录名为：PseudoPotential。
@@ -300,7 +302,7 @@ modify_POSCAR_Selective_Dynamics(data, indexes)
 ---
 3.5
 ```angular2html
-modify_INCAR_for_vibration_analysis():
+modify_INCAR_for_vibration_analysis()
 ```
 修改当前目录的INCAR为振动分析的INCAR并保存。
 修改内容包括：SYSTEM=Vib, NSW=1, POTIM=0.3, IBRION=5, NFREE=2, ISYM=0, PREC=Accurate。
@@ -325,7 +327,7 @@ Vasp前检查。提交计算任务前，检查当前目录Vasp的各项输入文
 ---
 3.7
 ```angular2html
-VaspCZ.zzdlib.Vasp.check_and_qsub([need_input=True]):
+VaspCZ.zzdlib.Vasp.check_and_qsub([need_input=True])
 ```
 检查前检查并提交任务。内部集成了上一个检查输入文件函数，使用中推荐该函数。
 
@@ -356,7 +358,7 @@ POSCAR原子:1种共计4个 Fe4   POTCAR原子:Fe   KPOINTS方法:Monkhorst 网�
 --------
 3.8
 ```angular2html
-VaspCZ.zzdlib.Vasp.keepInputs([addfile=[], workdir='./']):
+VaspCZ.zzdlib.Vasp.keepInputs([addfile=[], workdir='./'])
 ```
 删除工作目录下的文件，仅保留输入文件。默认保留文件为：INCAR，POSCAR，POTCAR， KPOINTS和Vasp.sh
 
@@ -373,7 +375,7 @@ VaspCZ.zzdlib.Vasp.keepInputs([addfile=[], workdir='./']):
 ---
 3.9
 ```angular2html
-VaspCZ.zzdlib.Vasp.checkNEBperiod():
+VaspCZ.zzdlib.Vasp.checkNEBperiod()
 ```
 
 遍历当前路径下的所有文件夹，如果发现有neb计算，判断ini和fin分别的计算周期，并返回
@@ -385,6 +387,6 @@ VaspCZ.zzdlib.Vasp.checkNEBperiod():
 ---
 3.10
 ```angular2html
-VaspCZ.zzdlib.Vasp.check_WARNING_and_Energy(path='.'):
+VaspCZ.zzdlib.Vasp.check_WARNING_and_Energy(path='.')
 ```
 检查输入路径下的结构优化是否完成，有无WARNING，并返回能量。
