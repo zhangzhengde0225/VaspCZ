@@ -346,6 +346,8 @@ cd 2.2
 任务名|ini/Opt/Vasp.sh中的最后一位改为N
 
 
+
+
 ####
 ## 2. VaspCZ python API
 
