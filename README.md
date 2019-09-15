@@ -123,7 +123,7 @@ vcz
 1.8|后检查并打印计算结果
 
 
-#### 例字：
+#### 示例：
 进入到项目自带的examples：(如安装中改变了，请将"/home/zhangzd/bin"替换为你配置的主程序安装路径)
 ```angular2html
 cd /home/zhangzd/bin/VaspCZ/examples/
@@ -237,6 +237,7 @@ vcz
 检查当前目录及所有子目录下的结构优化和静态计算的结果，如OUTCAR或者log中有错误(ERROR)或警告(WARNING)或提示所在位置。
 
 输出如图所示：
+
 <img src="https://github.com/zhangzhengde0225/VaspCZ/blob/master/figs/VaspCZ_1.8_output.png" width="700" align=center>
 
 检查所有路径计算是否完成，输出当前路径、离子步数和电子步数。
@@ -280,6 +281,50 @@ NEB计算目录
 ```
 在准备进行过渡态计算的目录下，创建文件夹ini和fin分别代表初态和末态，在它们之下再分别创建Opt文件夹。计算步骤如下：
 
+```markflow
+st=>start:Start
+e=>End
+op=>operation: My Operation
+cond=>condition: Yes or No?
+inp=>Input
+
+st->op->cond
+cond(yes)->e
+cond(no)->inp->op
+```
+```flow
+st=>start: index
+op=>operation: 申请
+op2=>operation: 结果页
+op3=>operation: 查询本地
+i1=>inputoutput: bid入库
+i2=>inputoutput: 填写个人信息
+c1=>condition: 检查登录
+c2=>condition: 登录
+c3=>condition: 查询本地记录
+c4=>condition: 检测状态
+c5=>operation: 风控审核
+e=>end
+
+st->op->c1()
+c1(no)->c2(yes)->op()
+c1(yes)->c3(no)->i1(right)->i2(right)->c5()->op2->e
+c1(yes)->c3(yes)->c4(no)->i2
+c1(yes)->c3(yes)->c4(yes)->op3->op2
+c3()->e
+```
+
+```flow
+sequenceDiagram
+    Alice ->> Bob: Hello Bob, how are you?
+    Bob-->>John: How about you John?
+    Bob--x Alice: I am good thanks!
+    Bob-x John: I am good thanks!
+    Note right of John: Bob thinks a long<br/>long time, so long<br/>that the text does<br/>not fit on a row.
+
+    Bob-->Alice: Checking with John...
+    Alice->John: Yes... John, how are you?
+```
 1. ini/Opt/下进行初态的结构优化
 
 2. fin/Opt/下进行末态的结构优化
