@@ -47,8 +47,7 @@ python3 install.py
 vcz
 ```
 程序界面如图：
-![程序主界面](https://github.com/zhangzhengde0225/VaspCZ/blob/master/figs/VaspCZ_mainface.png)
-
+![程序主界面](https://github.com/zhangzhengde0225/VaspCZ/blob/master/figs/VaspCZ_mainface.png){:height='100' width='200'}
 卸载：
 ```angular2html
 python3 uninstall.py
