@@ -22,7 +22,7 @@ def run():
 	# print(VaspCZ_path)
 	i = 0
 	while True:
-		content = {0: 'Exit', 1: 'OS module', 2: 'NEB module', 3: 'Test module'}
+		content = {0: 'Exit', 1: 'Opt and Sta module', 2: 'NEB module', 3: 'Test module'}
 		ipt = input(utils.gui_string(
 			title='VaspCZ interface',
 			content=content,
@@ -33,7 +33,7 @@ def run():
 			print(f'VaspCZ 功能{e}选择错误，请正确输入.')
 			pass
 		# print(ipt)
-		if ipt == 'OS module':
+		if ipt == 'Opt and Sta module':
 			print(f'OS module selected')
 			content_os = utils.zip_content([
 				'Back', 'Generate inputs (example)', 'Generate INCAR for Sta', 'Generate POTCAR',
