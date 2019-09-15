@@ -10,7 +10,8 @@ def run():
 			pass
 		else:
 			del_files.append(file)
-	ipt = input(f'Those file/dir will be deleted: {del_files}\nconfirm ([y]es/no): ')
+	ipt = input(f'Thoes files/dir will be kept: {maintain_files} \nThose files/dirs will be deleted: {del_files}\nconfirm ([y]es/no): ')
+	ipt = 'y' if ipt == '' else ipt
 	if ipt in ['y', 'YES', 'yes', 'Y']:
 		for file in del_files:
 			os.system(f'rm -rf {file}')

@@ -233,9 +233,14 @@ class Vasp():
 					pass
 				else:
 					del_files.append(files[i])
-			ipt = input(f'准备删除{workdir}下的文件：{del_files}\n是否删除([y]es/no): ')
+			if len(del_files) == 0:
+				ipt = 'no'
+				pass
+			else:
+				ipt = input(f'准备删除路径"{workdir}"下的文件：{del_files}\n是否删除([y]es/no): ')
 		else:
 			ipt = 'y'
+		ipt = 'y' if ipt == '' else ipt
 		if ipt in ['y', 'Y', 'yes', 'YES']:
 			dir = 'KeepInputsDir'
 			os.system('mkdir ' + dir)

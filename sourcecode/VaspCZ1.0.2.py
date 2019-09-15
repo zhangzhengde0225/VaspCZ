@@ -102,8 +102,10 @@ def run():
 					exit()
 				elif ipt2 == 'NEB Keep Inputs':
 					subprocess.call(f'{python} {VaspCZ_path}/VaspNEBKeepInputs.py', shell=True)
+					exit()
 				elif ipt2 == 'NEB Check RMS':
 					subprocess.call(f'{python} {VaspCZ_path}/VaspNEBCheckRMS.py', shell=True)
+					exit()
 				elif ipt2 == 'NEB Check Dist':
 					ipt2_nebcd = input('Check ([POS]/CONT):  ')
 					pos_or_cont = 'POSCAR' if (ipt2_nebcd == 'POS' or ipt2_nebcd == '') else 'CONTCAR'
