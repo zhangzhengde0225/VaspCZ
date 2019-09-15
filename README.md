@@ -47,15 +47,7 @@ python3 install.py
 vcz
 ```
 程序界面如图：
- <div align=center>
-![程序主界面](https://github.com/zhangzhengde0225/VaspCZ/blob/master/figs/VaspCZ_mainface.png)
-</div>
-
-dddd
-
-<img src="http://pic11.photophoto.cn/20090626/0036036341009653_b.jpg" width="100" height="100" >
-
-<img src="https://github.com/zhangzhengde0225/VaspCZ/blob/master/figs/VaspCZ_mainface.png" width="200" height="100" >
+<img src="https://github.com/zhangzhengde0225/VaspCZ/blob/master/figs/VaspCZ_mainface.png" width="400" align=center>
 
 
 
