@@ -19,7 +19,7 @@ VaspCZ_path = [
 
 
 def run():
-	print(VaspCZ_path)
+	# print(VaspCZ_path)
 	i = 0
 	while True:
 		content = {0: 'Exit', 1: 'OS module', 2: 'NEB module', 3: 'Test module'}

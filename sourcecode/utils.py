@@ -1,6 +1,5 @@
 import os,sys
 import VaspCZ.zzdlib as zzd
-import VaspCheckResults
 import subprocess
 
 
@@ -142,7 +141,7 @@ def deal_with_gen_vasp_sh():
 	if ipt == '0':
 		return None
 	elif ipt == '':
-		nodes, ppn, jobname = ('1', '12', 'vaspjob')/public/home/yangyuqi/bin/VaspCZ/sourcecode
+		nodes, ppn, jobname = ('1', '12', 'vaspjob')
 	else:
 		try:
 			nodes, ppn, jobname = ipt.split()
@@ -200,47 +199,68 @@ def deal_with_neb_opt_sta():
 			subprocess.call(f'{python} {VaspCZ_path}/VaspOpt-Sta.py', shell=True)
 			exit()
 		elif ipt == '2':
+			data_Vaspsh = zzd.File.openFile('./ini/Opt/Vasp.sh', 'r')
+			d_jobname = zzd.File.getLine(data_Vaspsh, '#PBS -N')[0].strip('\n').split()[-1]
+			d_jobname = f'{d_jobname[:-1]}S'
+			d_nodes = zzd.File.getLine(data_Vaspsh, '#PBS -l nodes')[0].strip('\n').split()[-1].split(':')[0].split('=')[-1]
+			d_ppn = zzd.File.getLine(data_Vaspsh, '#PBS -l nodes')[0].strip('\n').split()[-1].split(':')[-1].split('=')[-1]
 			content2 = zip_content([
 				'Exit',
 				'The static calculations in sub directories ini/ and fin/ will be performed when optimizations in ini/Opt and fin/Opt are finished.',
 				'Default nodes and ppn from ini/Opt/Vasp.sh',
-				'Change settings by input like: nodes ppn'
+				f'Default nodes:               {d_nodes:>15}',
+				f'Default ppn:                 {d_ppn:>15}',
+				f'Default jobname:             {d_jobname:>15}',
+				'Change settings by input like: nodes ppn jobname'
 			])
 			ipt2 = input(gui_string(
 				title='Vasp NEB INI FIN Opt-Sta', content=content2, mode='string'))
 			if ipt2 == '0':
 				exit()
 			elif ipt2 == '':
-				nc = '0,0'
+				nc = f'{d_nodes},{d_ppn}'
+				jobname = d_jobname
 			else:
 				try:
-					nc= f'{ipt2.split()[0]},{ipt2.split()[1]}'
+					nc = f'{ipt2.split()[0]},{ipt2.split()[1]}'
+					jobname = ipt2.split()[2]
 				except Exception as e:
 					raise NameError(f'{e} deal_with_neb_opt_sta error, 输入错误')
-			subprocess.call(f'{python} {VaspCZ_path}/VaspINFIOpt-Sta.py --nc={nc}', shell=True)
+			subprocess.call(f'{python} {VaspCZ_path}/VaspINFIOpt-Sta.py --nc={nc} --jobname={jobname}', shell=True)
 			exit()
 		else:
 			pass
 
 def deal_with_neb_sta_neb():
+	data_Vaspsh = zzd.File.openFile('./ini/Opt/Vasp.sh', 'r')
+	d_jobname = zzd.File.getLine(data_Vaspsh, '#PBS -N')[0].strip('\n').split()[-1]
+	d_jobname = f'{d_jobname[:-2]}NEB'
+	d_nodes = zzd.File.getLine(data_Vaspsh, '#PBS -l nodes')[0].strip('\n').split()[-1].split(':')[0].split('=')[-1]
+	d_ppn = zzd.File.getLine(data_Vaspsh, '#PBS -l nodes')[0].strip('\n').split()[-1].split(':')[-1].split('=')[-1]
+
 	content = zip_content([
 		'Exit',
 		'The NEB calculation will be performed when static calculations in ini/ and fin/ are finished.',
 		'The INCAR of NEB will be generated automatically fitted to NEB calculation based on ini/Opt/INCAR, The images is approximately equal to (distance between ini/CONTCAR and fin/CONTCAR)/0.8',
 		'Default nodes and ppn from ini/Opt/Vasp.sh',
-		'Change settings by input like: nodes ppn'
+		f'Default nodes:                 {d_nodes:>15}',
+		f'Defalut ppn:                   {d_ppn:>15}',
+		f'Defalut jobname:               {d_jobname:>15}',
+		'Change settings by input like: nodes ppn jobname'
 	])
 	ipt = input(gui_string(title='Vasp NEB Sta-NEB', content=content, mode='string'))
 	if ipt == '0':
 		return None
 	elif ipt == '':
-		nc = '0,0'
+		nc = f'{d_nodes},{d_ppn}'
+		jobname = d_jobname
 	else:
 		try:
 			nc = f'{ipt.split()[0]},{ipt.split()[1]}'
+			jobname = ipt.split()[2]
 		except Exception as e:
 			raise NameError(f'{e} deal_with_neb_sta_neb error, 输入错误')
-	subprocess.call(f'{python} {VaspCZ_path}/VaspINFISta-NEB.py  --nc={nc}', shell=True)
+	subprocess.call(f'{python} {VaspCZ_path}/VaspINFISta-NEB.py  --nc={nc} --jobname={jobname}', shell=True)
 
 
 def deal_with_neb_vibration_analysis():

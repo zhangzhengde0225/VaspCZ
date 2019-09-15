@@ -3,7 +3,7 @@
 import sys
 sys.path.append('/home/zhangzhengde/bin/pythonlib')
 import os
-import zzdlib
+import VaspCZ.zzdlib as zzdlib
 import argparse
 
 
@@ -12,8 +12,9 @@ inl = ['ini','fin']
 parser = argparse.ArgumentParser(description = 'manual to this script')
 parser.add_argument('--nc',type=str,default='0,0')
 parser.add_argument('--EMER',type=str,default='default')
+parser.add_argument('--jobname', type=str, default='vaspstatic')
 args = parser.parse_args()
-print('脚本运行，参数:--nc={}  --EMER={}'.format(args.nc,args.EMER))
+print('脚本运行，参数:--nc={}  --EMER={}  --jobname={}'.format(args.nc, args.EMER, args.jobname))
 
 
 for i in inl:
@@ -21,7 +22,7 @@ for i in inl:
 	os.system('cp ./'+i+'/Opt/CONTCAR ./'+i+'/POSCAR')
 	os.system('cp ./'+i+'/Opt/POTCAR ./'+i)
 	os.system('cp ./'+i+'/Opt/KPOINTS ./'+i)
-	os.system('cp ./'+i+'/Opt/Vasp.sh ./'+i)	
+	# os.system('cp ./'+i+'/Opt/Vasp.sh ./'+i)
 	os.chdir(i)
 	with open('./INCAR','r') as f:
 		data_INCAR = f.readlines()
@@ -39,11 +40,14 @@ for i in inl:
 		f.close()
 		print("修改"+i+"静态INCAR完成")
 	data_Sh = zzdlib.File.openFile('./Vasp.sh','r')
-	#修改任务名
-	oldname = zzdlib.File.getLine(data_Sh,'#PBS -N')[0].strip('\n').split()[-1]
-	jobname = oldname[:-1]+'S'
-	data_Sh = zzdlib.File.substituteData(data_Sh,'#PBS -N',' #PBS -N '+jobname)
-	#修改nodes
+	# 修改任务名
+	# oldname = zzdlib.File.getLine(data_Sh,'#PBS -N')[0].strip('\n').split()[-1]
+	# jobname = oldname[:-1]+'S'
+	vaspsh_path = zzdlib.File.Vaspsh_path()
+	os.system(f'cp {vaspsh_path}/Vasp.sh .')
+	jobname = args.jobname
+	data_Sh = zzdlib.File.substituteData(data_Sh,'#PBS -N', ' #PBS -N '+jobname)
+	# 修改nodes
 	ndAndnc = zzdlib.File.getLine(data_Sh,'#PBS -l nodes')[0].strip('\n').split()[-1]
 	nd = ndAndnc.split(':')[0].split('=')[-1]
 	nc = ndAndnc.split(':')[1].split('=')[-1]
