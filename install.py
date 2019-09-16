@@ -49,10 +49,13 @@ def install(prefix, shortcut):
 	os.mkdir('sourcecode')
 	os.system('cp -rf '+file_path+'/sourcecode/* ./sourcecode/')  # 拷贝源文件
 	# 例子
-	if os.path.isdir('examples'):
-		os.system(f'rm -rf examples')
-	os.mkdir(f'examples')
-	os.system(f'cp -rf {file_path}/examples/* ./examples/')
+
+	os.system(f'cp -rf {file_path}/examples.zip .')
+	os.system(f'unzip examples.zip')
+	# if os.path.isdir('examples'):
+	# 	os.system(f'rm -rf examples')
+	# os.mkdir(f'examples')
+	# os.system(f'cp -rf {file_path}/examples/* ./examples/')
 
 	# 修改Main.py的表头
 	with open(f'sourcecode/VaspCZ{__version__}.py', 'r') as f:
