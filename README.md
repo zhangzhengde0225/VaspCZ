@@ -84,7 +84,7 @@ ModuleNotFoundError: No module named 'numpy'
 pip3 install numpy
 ```
 -------
-# 四、使用和示例
+# 三、使用和示例
 本章主要描述软件部分的使用方法和示例，Python API接口部分仅描述功能，接口详细信息参见[API说明文档](https://github.com/zhangzhengde0225/VaspCZ/blob/master/docs/VaspCZ_lib.md)。
 ## 1. VaspCZ 软件部分 (主程序)
 软件部分提供了Linux字符串用户界面，用于在超算平台中快捷提交任务和检查结果。包含三个模块：结构优化和静态计算(OS)模块、过渡态计算(NEB)模块和截断能K点测试(Test)模块。
@@ -602,7 +602,7 @@ import VaspCZ.zzdlib as zzd
 3.9|VaspCZ.zzdlib.Vasp.checkNEBperiod()|遍历当前路径下的所有文件夹，如果发现有neb计算，判断ini和fin分别的计算周期，并返回
 
 -----
-# 五、其他说明
+# 四、其他说明
 该项目已免费开源，[开源许可](https://github.com/zhangzhengde0225/VaspCZ/blob/master/LICENSE.md)。
 
 欢迎开发和补充，如用于商业用途请注明出处。
