@@ -3,7 +3,7 @@
 
 import os
 import argparse
-
+import VaspCZ.zzdlib as zzd
 
 def modify_vasp_sh(jobname, nodes, ppn):
 	with open('./Vasp.sh', 'r') as f:
@@ -21,15 +21,21 @@ def modify_vasp_sh(jobname, nodes, ppn):
 
 
 def run(jobname, nodes, ppn, K):
+	input_files = 'INCAR,POSCAR,POTCAR,KPOINTS'.split(',')
+	for i in input_files:
+		if i not in os.listdir():
+			raise NameError(f'ENCUT Test: input file "{i}" missing in current dir.')
 	if os.path.isdir(K):  # 有目录什么也不做
 		print(f'k_mesh:{K} already exists, do nothing.')
 		pass
 	else:
 		os.system('mkdir '+K)  # 创建目录
-		for file in os.listdir():
+		for file in input_files:
 			if os.path.isfile(file):
 				os.system(f'cp {file} {K}')# 拷贝输入文件
 		os.chdir(K)  # 进入创建的目录
+		vasp_sh_path = zzd.File.Vaspsh_path()
+		os.system(f'cp {vasp_sh_path}/Vasp.sh .')
 		# 无需修改INCAT
 		# 无需修改POTCAR
 		# 无需修改POSCAR

@@ -22,7 +22,7 @@ def modify_vasp_sh(jobname, nodes, ppn):
 
 
 def run(jobname, nodes, ppn, encut):
-	input_files = 'INCAR,POSCAR,POTCAR,KPOINTS,Vasp.sh'.split(',')
+	input_files = 'INCAR,POSCAR,POTCAR,KPOINTS'.split(',')
 	for i in input_files:
 		if i not in os.listdir():
 			raise NameError(f'ENCUT Test: input file "{i}" missing in current dir.')
@@ -31,10 +31,12 @@ def run(jobname, nodes, ppn, encut):
 		pass
 	else:
 		os.system('mkdir '+encut)  # 创建目录
-		for file in os.listdir():
+		for file in input_files:
 			if os.path.isfile(file):
 				os.system(f'cp {file} {encut}')# 拷贝输入文件
 		os.chdir(encut)  # 进入创建的目录
+		vasp_sh_path = zzd.File.Vaspsh_path()
+		os.system(f'cp {vasp_sh_path}/Vasp.sh .')
 		# 需修改INCAR
 		data_INCAR = zzd.File.openFile('INCAR', 'r')
 		data_new = zzd.File.substituteData(data_INCAR, keywords='ENCUT', newline=f'ENCUT={encut}\n')

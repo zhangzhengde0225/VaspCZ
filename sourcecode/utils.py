@@ -238,12 +238,23 @@ def deal_with_neb_sta_neb():
 	d_nodes = zzd.File.getLine(data_Vaspsh, '#PBS -l nodes')[0].strip('\n').split()[-1].split(':')[0].split('=')[-1]
 	d_ppn = zzd.File.getLine(data_Vaspsh, '#PBS -l nodes')[0].strip('\n').split()[-1].split(':')[-1].split('=')[-1]
 
+	dist = zzd.getshellResult('dist.pl ini/CONTCAR fin/CONTCAR')
+	dist = eval(dist[-1])
+	print('ini和fin中CONTCAR的dist为：{}'.format(dist))
+	if dist >= 9:
+		print('dist过大，请检查')
+		raise NameError(f'初态和末态距离太大，插入态数目大于9，不合理，请检查。')
+	else:  # 向下取整数，如果是偶数则加一，如果是奇数直接用。0-1.9输入1，2-3.9属于3，4-5.9属于5
+		image = int(dist / 0.8)
+		if image % 2 == 0:  # 是偶数
+			image = image + 1
+
 	content = zip_content([
 		'Exit',
 		'The NEB calculation will be performed when static calculations in ini/ and fin/ are finished.',
 		'The INCAR of NEB will be generated automatically fitted to NEB calculation based on ini/Opt/INCAR, The images is approximately equal to (distance between ini/CONTCAR and fin/CONTCAR)/0.8',
 		'Default nodes and ppn from ini/Opt/Vasp.sh',
-		f'Default nodes:                 {d_nodes:>15}',
+		f'Default nodes:                 {image:>15}',
 		f'Defalut ppn:                   {d_ppn:>15}',
 		f'Defalut jobname:               {d_jobname:>15}',
 		'Change settings by input like: nodes ppn jobname'
@@ -252,7 +263,7 @@ def deal_with_neb_sta_neb():
 	if ipt == '0':
 		return None
 	elif ipt == '':
-		nc = f'{d_nodes},{d_ppn}'
+		nc = f'{image},{d_ppn}'
 		jobname = d_jobname
 	else:
 		try:
@@ -299,20 +310,25 @@ def deal_with_neb_check_results():
 		'NEB Barrier in typical step'
 	])
 	while True:
-		ipt = input(gui_string(title='NEB Check Results', content=content, mode='select'))
+		ipt = input(gui_string(title='NEB Check Results', content=content, mode='select', iptnote="(1/2/[3]/4)"))
 		if ipt == '0':
 			break
+		elif ipt == '':
+			ipt = '3'
+			subprocess.call(f'{python} {VaspCZ_path}/NEBCheck1.1.py --func={ipt}', shell=True)
+			exit()
 		elif ipt in ['1', '2', '3', '4']:
 			subprocess.call(f'{python} {VaspCZ_path}/NEBCheck1.1.py --func={ipt}', shell=True)
 			exit()
 		else:
+			print(f'输入：{ipt}，选择功能错误，请正确输入')
 			pass
 
 
 def deal_with_test_kpoints():
 	content = zip_content([
 		'Exit',
-		'The KPOINT test will be performed when the five input files in current dir (INCAR, POSCAR, POTCAR, KPOINTS, Vasp.sh)',
+		'The KPOINT test will be performed when the input files in current dir (INCAR, POSCAR, POTCAR, KPOINTS)',
 		'Default setting jobname prefix:      ktest_',
 		'Default setting nodes:                    1',
 		'Default setting ppn:                      8',
@@ -335,7 +351,7 @@ def deal_with_test_kpoints():
 def deal_with_test_encut():
 	content = zip_content([
 		'Exit',
-		'The ENCUT test will be performed when the five input files in current dir (INCAR, POSCAR, POTCAR, KPOINTS and Vasp.sh)',
+		'The ENCUT test will be performed when the five input in current dir (INCAR, POSCAR, POTCAR, KPOINTS)',
 		'Default setting jobname prefix:      ENCUT_',
 		'Default setting nodes:                    1',
 		'Default setting ppn:                      8',
