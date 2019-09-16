@@ -48,9 +48,10 @@ def run(jobname, nodes, ppn, K):
 		# 修改Vasp.sh，指定任务和任务名，修改，提交任务
 		modify_vasp_sh(f'{jobname}_{K}', nodes, ppn)
 		# 测试代码，打印
-		#os.system('cat KPOINTS')
-		#os.system('cat Vasp.sh')
-		os.system('qsub Vasp.sh')  # 提交任务
+		## os.system('cat KPOINTS')
+		## os.system('cat Vasp.sh')
+		# os.system('qsub Vasp.sh')  # 提交任务
+		zzd.Vasp.check_and_qsub()
 		os.chdir('..')
 
 
