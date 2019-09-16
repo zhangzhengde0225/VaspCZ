@@ -1,17 +1,13 @@
 # 一、简介
 
-VaspCZ(Vasp Check by Zzd)是作者在读博期间为提高科研效率而开发的Vasp辅助程序。该程序包换软件部分和API部分。
+VaspCZ(Vasp Check by Zzd)是作者在读博期间为提高科研效率而开发的Vasp辅助程序。该程序包含软件部分和API部分。
 
 软件部分提供了Linux字符串用户界面，用于在超算平台中快捷提交任务和检查结果。包含三个模块：结构优化和静态计算(OS)模块、过渡态计算(NEB)模块和测试(Test)模块。
 
-API部分软件部分的底层，是自己写的一个python库。为有python基础的研究者开发提供了调用相关功能的接口，可以实现自定义计算和编写上层应用。[API说明文档](https://github.com/zhangzhengde0225/VaspCZ/blob/master/docs/VaspCZ_lib.md)
-
---------
-# 二、程序框架
-xxxx
+API部分为软件部分的底层，是自己写的一个python库。为有python基础的研究者提供了调用相关功能的接口，可以实现自定义计算和编写上层应用。[API说明文档](https://github.com/zhangzhengde0225/VaspCZ/blob/master/docs/VaspCZ_lib.md)。
 
 ---------
-# 三、安装
+# 二、安装
 ## 1. 安装和卸载
 代码下载：
 ```angular2html
@@ -607,14 +603,15 @@ import VaspCZ.zzdlib as zzd
 
 -----
 # 五、其他说明
-该项目已免费开源，[开源许可]()
-
-如遇bug，敬请将说明、提示代码、截图等信息上报到drivener@163.com
-
-如对程序有疑问，请联系drivener@163.com
+该项目已免费开源，[开源许可](https://github.com/zhangzhengde0225/VaspCZ/blob/master/LICENSE.md)。
 
 欢迎开发和补充，如用于商业用途请注明出处。
 
+如遇bug，敬请将说明、提示代码、截图等信息上报到drivener@163.com。
+
+如对程序有疑问，请联系drivener@163.com。
+
+作者水平有限，代码有诸多不足之处，还望斧正。
 
 
 当前版本: 1.0.1

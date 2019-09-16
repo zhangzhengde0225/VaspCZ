@@ -23,6 +23,13 @@ data = zzd.File.open('')
 ```
 ## 二. API文档
 ### 1. shell模块
+功能列表：
+
+标签|代码|功能
+:---:|:---:|:---:
+1.1|VaspCZ.zzdlib.getshellResult(code)|返回shell命令控制台输出的结果，由每一行组成一个元素的列表。
+
+
 ```
 VaspCZ.zzdlib.getshellResult(code)
 ```
@@ -36,12 +43,25 @@ VaspCZ.zzdlib.getshellResult(code)
 + **return** : list
     
     返回列表，其中每个元素是控制台输出的一行，保留换行符\n
+   
     
 ### 2. File模块
 ```angular2html
 class VaspCZ.zzdlib.File()
 ```
 集成文件处理功能。
+
+功能列表：
+
+标签|代码|功能
+:---:|:---:|:---:
+2.1|VaspCZ.zzdlib.File.openFile(path, [mode='r', data=None])|读取文件或保存文件
+2.2|VaspCZ.zzdlib.File.substitudeData(data, keywords, newline, [mode='default'])|传入文件数据，给出关键词和新行，默认情形搜索出现第一次出现关键词的行并替换，mode不等于default是替换全部出现关键字的行，返回替换后的数据。
+2.3|VaspCZ.zzdlib.File.getLine(data,keywords)|给出关键词，招傲有关键词的第一行并返回，返回为字符串和所在的行索引。该功能用于获取特定想信息或者用于判断。
+2.4|VaspCZ.zzdlib.getAllline(data, keywords)|给出关键词，返回所有带有关键词的所有行，返回为列表。该功能用于选择性获得文件特定行。
+2.5|VaspCZ.zzdlib.getNullline(data)|获取文件数据中是空位的索引。
+2.6|VaspCZ.zzdlib.Vaspsh_path()|获取VaspCZ软件默认的PBS提交任务脚本Vasp.sh所在的文件路径。
+
 
 ------
 2.1
@@ -177,6 +197,21 @@ Vasp计算类。
 class Vasp()
 ```
 类名。
+
+功能列表：
+
+标签|代码|功能
+:---|:---:|:---:
+3.1|VaspCZ.zzdlib.Vasp.decode_POSCAR(POSCAR)|解码POSCAR，返回一个基矢、原子种类、原子数目、每个原子的位置（取前4位）
+3.2|VaspCZ.zzdlib.Vasp.modify_POSCAR_ele(oldele, new_ele)|修改当前路径下POSCAR的原子种类，适合批量修改。
+3.3|VaspCZ.zzdlib.Vasp.gennerate_POTCAR([elements=None, pseudotype='PBE'])|在当前路径生成POTCAR文件，需要在安装中正确是指贋势文件目录，默认贋势文件目录为用户根目录。贋势目录名为：PseudoPotential。
+3.4|modify_POSCAR_Selective_Dynamics(data, indexes)|根据输入的数据和索引修改POSCAR，添加Selective Dynamics, 索引所在的位置设置为T T T, 其他位置设置为 F F F
+3.5|modify_INCAR_for_vibration_analysis()|修改当前目录的INCAR为振动分析的INCAR并保存.
+3.6|VaspCZ.zzdlib.Vasp.checkInputs()|Vasp前检查。提交计算任务前，检查当前目录Vasp的各项输入文件，将计算信息打印到控制台，包含：计算路径、SYSTEM、截断能、ISIF、离子更新方法、是否有磁性、电子收敛标准、离子收敛标准、原子种类个数、POTCAR原子类型、KPOINTS方法、网格大小、任务名、节点数与核数、是否加急。
+3.7|VaspCZ.zzdlib.Vasp.check_and_qsub([need_input=True])|检查前检查并提交任务。内部集成了上一个检查输入文件函数，使用中推荐该函数。
+3.8|VaspCZ.zzdlib.Vasp.keepInputs([addfile=[], workdir='./'])|删除工作目录下的文件，仅保留输入文件。默认保留文件为：INCAR，POSCAR，POTCAR， KPOINTS和Vasp.sh
+3.9|VaspCZ.zzdlib.Vasp.checkNEBperiod()|遍历当前路径下的所有文件夹，如果发现有neb计算，判断ini和fin分别的计算周期，并返回
+
 
 -----
 3.1
