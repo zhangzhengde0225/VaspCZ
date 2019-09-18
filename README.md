@@ -12,6 +12,8 @@ API部分为软件部分的底层，是自己写的一个python库。为有pytho
 
 ## 软件部分
 
+超算平台linux(centos, ubuntu, redhat等)用户界面，无需python基础，会基本的linux命令即可。
+
 + OS模块(结构优化和静态计算模块)
     - 1.1 产生Vasp输入文件(示例)
     - 1.2 修改INCAR为静态计算INCAR
@@ -46,6 +48,8 @@ API部分为软件部分的底层，是自己写的一个python库。为有pytho
         * 一键K点测试
         
 ## API部分
+
+软件部分底层，python的API库，库名：VaspCZ.zzdlib，需有python基础，知道如何调用库。
 
 + shell模块
     - 1.1 快捷获取控制台输出
