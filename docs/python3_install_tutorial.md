@@ -4,7 +4,7 @@
 ## 1. 下载和安装
 代码下载：
 ```angular2html
-wget http://python.org/ftp/python/3.7.1/Python-3.7.1.tar.xz
+wget http://python.org/ftp/python/3.6.1/Python-3.6.1.tar.xz
 ```
 或者官网下载最新版：[地址](https://www.python.org/downloads/source/)
 

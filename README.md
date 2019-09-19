@@ -104,6 +104,7 @@ vcz | 用户根目录/bin/VaspCZ | VaspCZ主程序快捷键
 ```angular2html
 python3 install.py
 ```
+#### 注意：请将python更新至3.6及以上版本，原因：源代码中使用了f-strings功能，需要3.6及以上版本支持。
 输入快捷键运行程序：
 ```angular2html
 vcz
