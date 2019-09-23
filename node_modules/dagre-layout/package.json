@@ -1,0 +1,73 @@
+{
+  "name": "dagre-layout",
+  "version": "0.8.8",
+  "description": "Graph layout for JavaScript",
+  "author": "Tyler Long <tyler4long@gmail.com>",
+  "main": "dist/dagre-layout.core.js",
+  "keywords": [
+    "graph",
+    "layout",
+    "dagre"
+  ],
+  "scripts": {
+    "lint": "standard",
+    "jest": "jest --coverage",
+    "karma": "node -r babel-register node_modules/.bin/karma start",
+    "test": "yarn lint && yarn jest && yarn karma --single-run",
+    "bench": "node -r babel-register src/bench.js",
+    "build": "webpack --progress --colors",
+    "build:watch": "yarn build --watch",
+    "release": "yarn build -p",
+    "upgrade": "yarn-upgrade-all",
+    "prepush": "yarn test",
+    "prepublishOnly": "yarn release"
+  },
+  "dependencies": {
+    "graphlibrary": "^2.2.0",
+    "lodash": "^4.17.5"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.6.1",
+    "benchmark": "^2.1.4",
+    "chai": "^4.1.2",
+    "coveralls": "^3.0.0",
+    "husky": "^0.14.3",
+    "jest": "^22.4.2",
+    "karma": "^2.0.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-firefox-launcher": "^1.1.0",
+    "karma-mocha": "^1.3.0",
+    "karma-safari-launcher": "^1.0.0",
+    "mocha": "^5.0.4",
+    "sprintf": "^0.1.5",
+    "standard": "^11.0.1",
+    "webpack": "^4.1.1",
+    "webpack-cli": "^2.0.12",
+    "webpack-node-externals": "^1.6.0",
+    "yarn-upgrade-all": "^0.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tylingsoft/dagre-layout.git"
+  },
+  "license": "MIT",
+  "files": [
+    "dist/",
+    "lib/",
+    "index.js"
+  ],
+  "standard": {
+    "ignore": [
+      "dist/**/*.js",
+      "coverage/**/*.js"
+    ]
+  },
+  "jest": {
+    "testRegex": "test/.+?-test\\.js",
+    "testPathIgnorePatterns": [
+      "test/bundle-test\\.js"
+    ]
+  }
+}

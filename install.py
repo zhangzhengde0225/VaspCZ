@@ -143,7 +143,7 @@ if __name__ == '__main__':
 	home = os.path.expanduser('~')
 	Vaspsh_path = os.path.expanduser('~') if args.Vaspsh_path == '~' else args.Vaspsh_path
 	Vaspsh_path = Vaspsh_path if '~/' not in Vaspsh_path else os.path.join(home, Vaspsh_path.split('~/')[-1])
-	psp_path = os.path.expanduser('~') if args.Vasp_Pseudopotential_path == '~' else args.Vasp_Psudopotential_path
+	psp_path = os.path.expanduser('~') if args.Vasp_Pseudopotential_path == '~' else args.Vasp_Pseudopotential_path
 	Vasp_Pseudopotential_path = psp_path if '~/' not in psp_path else os.path.join(home, psp_path.split('~/')[-1])
 	prefix = os.path.expanduser('~') if args.prefix == '~' else args.prefix
 	prefix = prefix if '~/' not in prefix else os.path.join(home, prefix.split('~/')[-1])
