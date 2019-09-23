@@ -15,7 +15,7 @@ subgraph NEB module
 2.7(Check convergence)
 2.4[Deal with input files]
 2.5((Check NEB results))
-2.6((Check NEB vib. results))
+2.6((Check NEB vib. results))l
 2.1-->2.2
 2.2-->2.3
 2.4-->2.1
