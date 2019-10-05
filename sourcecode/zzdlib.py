@@ -403,7 +403,7 @@ class Vasp():
 				code = f'cat {path}/POTCAR >POTCAR' if i==0 else f'cat {path}/POTCAR >>POTCAR'
 				os.system(code)
 			else:
-				raise NameError(f'gennerate POTCAR error, element "{elements[i]}" not found in path: {path}\n请正确配置贋势文件路径')
+				raise NameError(f'gennerate POTCAR error, element "{elements[i]}" not found in path: {path}\n请正确配置贋势文件路径。\n配置方法：将你的贋势文件夹拷贝到目录"{File.Vasp_pseudo_path()}"下并命名为：PseudoPotential/[贋势类型]。')
 
 	def generate_KPOINTS(vector='5 5 5', kptype='Monkhorst'):
 		data = []
