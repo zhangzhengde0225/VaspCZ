@@ -32,7 +32,7 @@ for file in ['INCAR', 'POSCAR', 'POTCAR', 'KPOINTS', 'Vasp.sh']:
 
 ipt = input(f'即将删除文件和文件夹\n当前目录下: {del_files}\nini/下: {del_ini_files}\nini/Opt/下: {del_ini_Opt_files}\nfin/下: {del_fin_files}\nfin/Opt/下: {del_fin_Opt_files}\n是否确定([y]es/no): ')
 
-if ipt in ['y', 'yes', 'Y', 'YES']:
+if ipt in ['y', 'yes', 'Y', 'YES', '']:
 	for file in del_files:
 		os.system(f'rm -rf {file}')
 	for infi in ['ini', 'fin']:
