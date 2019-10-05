@@ -1,9 +1,10 @@
 #!/home/zhangzhengde/bin/bin/python3
-#coding=utf-8
+# coding=utf-8
 
 import os
 import argparse
 import VaspCZ.zzdlib as zzd
+
 
 def modify_vasp_sh(jobname, nodes, ppn):
 	with open('./Vasp.sh', 'r') as f:

@@ -14,7 +14,7 @@ def generate_inputs(examp='fcc_Fe_3x3x3'):
 		print(f'生成文件：{file} (example)')
 	vaspsh_path = zzd.File.Vaspsh_path()
 	if 'Vasp.sh' not in os.listdir(vaspsh_path):
-		print(f'在路径"{vaspsh_path}"下未找到Vasp.sh文件，请正确配置')
+		print(f'在路径"{vaspsh_path}"下未找到Vasp.sh文件，将适合该平台的PBS脚本拷贝到该文件夹下。')
 	else:
 		os.system(f'cp {vaspsh_path}/Vasp.sh .')
 		print(f'生成文件：Vasp.sh (example)')
