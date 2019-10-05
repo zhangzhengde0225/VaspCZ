@@ -84,8 +84,7 @@ def install(prefix, shortcut):
 		f.writelines(f'Vasp_Pseudopotential_path={Vasp_Pseudopotential_path}')
 	os.chdir(file_path)
 	print('VaspCZ software installed successfully.\n')
-	print(f'安装成功，使用完全功能请手动完成以下配置：\n1. 将适合当前计算平台的PBS提交任务脚本拷贝到目录"{Vaspsh_path}"下并命名为Vasp.sh')
-	print(f'2. 将你的贋势文件拷贝到目录"{Vasp_Pseudopotential_path}"下并命名：PseudoPotential/[贋势类型]')
+
 
 
 def side_vtst(prefix):
@@ -161,5 +160,22 @@ if __name__ == '__main__':
 	os.chdir(os.path.expanduser('~'))
 	# os.system('source .bashrc')
 	subprocess.call(f'source {os.path.expanduser("~")}/.bashrc', shell=True)
-	print(f'{"":-<20}{"install finished":^20}{"":-<20}')
+	print(f'{"":-<20}{"install finished":^20}{"":-<20}\n')
+
+	# 判断
+	need = [0, 0]
+	if not ('Vasp.sh' in os.listdir(Vaspsh_path)):
+		need[0] = 1
+	if not ('PseudoPotential' in os.listdir(Vasp_Pseudopotential_path)):
+		need[1] = 1
+	if need[0] + need[1] == 0:
+		pass
+	else:
+		print(f'安装成功，使用完全功能请手动完成以下配置：')
+		index = 1
+		if need[0] == 1:
+			print(f'{index}. 将适合当前计算平台的PBS提交任务脚本拷贝到目录"{Vaspsh_path}"下并命名为：Vasp.sh。')
+			index += 1
+		if need[1] == 1:
+			print(f'{index}. 将你的贋势文件夹拷贝到目录"{Vasp_Pseudopotential_path}"下并命名为：PseudoPotential/[贋势类型]。')
 
