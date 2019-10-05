@@ -17,7 +17,7 @@ current_py_folder = os.path.dirname(os.path.abspath(__file__))
 VaspCZ_path = [
 	os.path.dirname(current_py_folder) if 'sourcecode' in current_py_folder else current_py_folder][0] + '/sourcecode'
 
-__version__ = '1.0.1'
+__version__ = '1.0.2'
 
 def run():
 	# print(VaspCZ_path)
