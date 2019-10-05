@@ -136,7 +136,7 @@ class Vasp():
 		EDIFF = File.getLine(data_INCAR,'EDIFF')[0].split('=')[-1]
 		EDIFFG = File.getLine(data_INCAR,'EDIFFG')[0].split('=')[-1]
 		
-		#检查POSCAR
+		# 检查POSCAR
 		if SYSTEM == 'NEB':
 			data_POSCAR = File.openFile('./00/POSCAR','r')
 		else:
@@ -148,7 +148,7 @@ class Vasp():
 		for i in range(len(elelist)):
 			POS_out = POS_out + elelist[i]+numlist[i]+' '
 		
-		#POTCAR
+		# POTCAR
 		data_POT = File.openFile('./POTCAR','r')
 		PAW = File.getAllline(data_POT,'PAW')
 		TITEL = File.getAllline(PAW,'TITEL')
@@ -164,7 +164,11 @@ class Vasp():
 		grid = data_KP[3].strip('\n')
 	
 		#Vasp.sh
-		data_Sh  = File.openFile('./Vasp.sh','r')
+		try:
+			data_Sh  = File.openFile('./Vasp.sh','r')
+		except Exception as e:
+			sh_path = File.Vaspsh_path()
+			raise NameError(f'当前目录:{os.getcwd()}不存在Vasp.sh文件，请配置和检查。配置：请将适合本平台的PBS脚本命名为Vasp.sh拷贝到目录"{sh_path}"下。')
 		jobname = File.getLine(data_Sh,'#PBS -N')[0].strip('\n').split()[-1]
 		jobnodes = File.getLine(data_Sh,'#PBS -l')[0].strip('\n').split()[-1]
 		EMER = File.getLine(data_Sh,'#PBS -q')[0].strip('\n').split()[-1]

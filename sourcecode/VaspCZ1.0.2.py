@@ -21,6 +21,16 @@ __version__ = '1.0.2'
 
 def run():
 	# print(VaspCZ_path)
+	# 检查Vasp.sh文件和PseudoPotential文件夹是否配置成功。
+	sh_pash = zzd.File.Vaspsh_path()
+	if 'Vasp.sh' in os.listdir(zzd.File.Vaspsh_path()):
+		pass
+	else:
+		print(f'VaspCZ WARNING: Vasp.sh文件没有正确配置。请将适合本平台PBS脚本拷贝到目录"{sh_pash}"下并命名为Vasp.sh，再重新运行程序。')
+	if 'PseudoPotential' in os.listdir(zzd.File.Vasp_pseudo_path()):
+		pass
+	else:
+		print(f'VaspCZ WARNING: 贋势文件没有正确配置。请将将你的贋势文件拷贝到目录"{zzd.File.Vasp_pseudo_path()}"下并命名：PseudoPotential/[贋势类型]。')
 	i = 0
 	while True:
 		content = {0: 'Exit', 1: 'Opt and Sta module', 2: 'NEB module', 3: 'Test module'}

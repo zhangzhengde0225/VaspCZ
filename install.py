@@ -82,10 +82,10 @@ def install(prefix, shortcut):
 		f.writelines(f'VaspCZ_path={prefix}/VaspCZ\n')
 		f.writelines(f'Vaspsh_path={Vaspsh_path}\n')
 		f.writelines(f'Vasp_Pseudopotential_path={Vasp_Pseudopotential_path}')
-
-
 	os.chdir(file_path)
 	print('VaspCZ software installed successfully.\n')
+	print(f'安装成功，使用完全功能请手动完成以下配置：\n1. 将适合当前计算平台的PBS提交任务脚本拷贝到目录"{Vaspsh_path}"下并命名为Vasp.sh')
+	print(f'2. 将你的贋势文件拷贝到目录"{Vasp_Pseudopotential_path}"下并命名：PseudoPotential/[贋势类型]')
 
 
 def side_vtst(prefix):
