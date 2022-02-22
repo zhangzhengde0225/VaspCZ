@@ -5,10 +5,8 @@
 @article{VaspCZ,
 title={VaspCZ: an Efficient VASP Computation Assistant Program},
 author={Zheng-De Zhang, Meng-Lu Tan, Cui-Lan Ren and Ping Huai},
-year={2020},
-volume={32},
-issue={3},
-pages={30501},
+journal={Nuclear Techniques},
+year={2020}, volume={32}, issue={3}, pages={30501},
 }
 ```
 
