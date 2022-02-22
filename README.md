@@ -1,8 +1,20 @@
 ### 如果对您有帮助，请引用paper：[VaspCZ：一个提高效率的VASP计算辅助程序](http://www.j.sinap.ac.cn/hjs/CN/10.11889/j.0253-3219.2020.hjs.43.030501)
 
+引用：
+```
+@article{VaspCZ,
+title={VaspCZ: an Efficient VASP Computation Assistant Program},
+author={Zheng-De Zhang, Meng-Lu Tan, Cui-Lan Ren and Ping Huai},
+year={2020},
+volume={32},
+issue={3},
+pages={30501},
+}
+```
+
 ### 求github star中，如果你觉得本项目不错，烦请点击项目右上角Star，感谢！~
 
-### 反馈调试中，如使用中遇到问题，敬请上报到drivener@163.com，再次感谢！~
+### 如使用中遇到问题，敬请上报到drivener@163.com，再次感谢！~
 
 # 一、简介
 
